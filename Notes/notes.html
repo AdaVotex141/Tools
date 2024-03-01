@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>notes.markdown</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="week-1-posix-systems">Week 1: POSIX Systems</h1>
+<h2 id="1system-administration">1.System Administration</h2>
+<h3 id="11-secure-shell">1.1 Secure Shell</h3>
+<p>安全外壳 (SSH) 是一种允许您远程登录另一台计算机（例如实验室机器）的协议。几乎每个使用 SSH 的人都使用免费的 OpenSSH 实现
+<img src="2024-02-25-175235.png" alt="">
+<img src="2024-01-25-20-30-17.png" alt="">
+<img src="2024-01-25-20-31-28.png" alt="">
+<img src="2024-01-25-21-15-02.png" alt=""></p>
+<ol>
+<li>连接到实验室
+<code>uname -a</code>这个命令通常用于显示操作系统的名称
+<code>whoami</code>
+<code>ssh -J</code>jump through this host,跳板连接是一种通过一个中间主机（跳板主机）来连接目标主机的方法，通常用于通过内部网络或防火墙访问无法直接连接的主机。</li>
+<li>设置 ssh 密钥
+something you know (password or PIN),something you have (physical key, digital key, ID card, passport)
+something you are (biometrics)
+<img src="2024-01-25-21-18-34.png" alt="">
+这一节就是讲keys，keys需要密码，而且本身也是一个文件，所以是双重登陆
+<img src="2024-01-25-21-20-56.png" alt="">
+使用的密钥是一对，一个private一个public</li>
+</ol>
+<p>创建：ssh keygen
+<img src="2024-01-25-21-24-07.png" alt="">
+/home/if23696/.ssh/id_ed25519</p>
+<p>所以本地有三个东西：一个秘钥，一个公钥，一个known_hosts（ OpenSSH 中用于存储远程主机的公钥信息的文件。当你首次连接到一个远程主机时，OpenSSH会将该主机的公钥信息保存在你的 ~/.ssh/known_hosts 文件中。这样，下次连接到相同的主机时，OpenSSH 将检查该主机的公钥是否与 known_hosts 文件中存储的相匹配。）
+3. 在 SEIS 上设置密钥访问</p>
+<p>ssh -A -J USERNAME@seis.bris.ac.uk USERNAME@rd-mvb-linuxlab.bristol.ac.uk
+4. 设置配置文件
+<code>scp</code>-secret copys:用于在 Unix-like 操作系统之间安全地复制文件的命令。它是基于 SSH 协议的，因此提供了加密的数据传输和身份验证。scp 的名称代表 &quot;Secure Copy Protocol&quot;
+<img src="2024-02-25-173923.png" alt="">
+<img src="2024-02-25-173952.png" alt="">
+如果有:这个东西，说明是另一个主机的地址
+复制以过去之后将内容复制到authoriz_key文件中
+<img src="2024-02-25-174528.png" alt="">
+chmod 600-&gt;八进制-&gt;110 000 000-&gt; rw- --- ---</p>
+<h3 id="12-vagrant">1.2 Vagrant</h3>
+<p>虚拟机
+<img src="2024-02-25-175101.png" alt="">
+需要有一个Vagrantfile
+<img src="2024-02-25-175123.png" alt="">
+ssh默认使用的是<strong>22</strong>端口，但是ssh默认使用的是<strong>2222</strong>端口
+Vagrant Box有默认的private key和secret key，一个新的默认更新一个</p>
+<h3 id="13-system-administration">1.3 System administration</h3>
+<p><code>apt</code>advanced package tool
+<img src="2024-02-25-181846.png" alt=""></p>
+<ul>
+<li>-V:选项用于显示详细的搜索结果，包括软件包的详细信息</li>
+<li>-d 选项用于显示每个软件包的详细描述</li>
+<li>-a:显示所有版本的信息，感觉是all</li>
+<li>-I:而 -I 是一个选项，用于显示已安装软件包的详细信息，包括版本号、架构等
+单独的</li>
+</ul>
+<p><code>sudo apt update</code>只是下载最新的package的清单，但是不安装任何东西
+<code>sudo apt upgrade</code>将所有已安装的package更新到最新版本
+<code>sudo apt install PACAKGE PACKAGE</code>安装</p>
+<p><code>dpkg-query -S /bin/bash</code>Debian系统及其衍生系统（
+<img src="2024-02-25-182636.png" alt="">
+<img src="2024-02-25-184420.png" alt=""></p>
+<p>然后给你讲一下linux系统
+<code>ls /</code>列出根目录的东西
+<code>/bin</code>binary，都是各种系统指令，<img src="2024-02-25-185628.png" alt="">
+小小的提了一嘴<code>which</code>:用于查找并显示指定命令的绝对路径。具体而言，它会告诉你系统中关于某个命令的执行文件所在的位置。一般都是系统层面的指令，比如说mv，ls这种最基本的
+比如说<code>which ls</code>
+和<code>pwd</code>不同的是，pwd主要是当前所在位置，find是查找文件，然后which是查找指令
+<img src="2024-02-25-185649.png" alt="">
+<code>/usr</code>存放用户安装软件以及系统共享资源的重要目录。和用户相关，但是基本都是只读文件
+提到了绿色的是可执行文件，蓝色的是指向其他文件的soft link
+<img src="2024-02-25-190226.png" alt="">
+<img src="2024-02-25-190327.png" alt="">
+<img src="2024-02-25-190343.png" alt="">
+所以这里提到了软连接和硬链接
+<strong>inode</strong>：inode 是文件系统中的一个概念，用于表示文件或目录的元数据信息。每个文件或目录在文件系统中都与一个唯一的 inode 相关联。inode 记录了文件或目录的诸多属性，但不包括文件名或路径。</p>
+<p><code>/etc</code>系统层面的configuration file，然后基本是只有root用户可以更改
+<code>/lib</code>dynamic-libraries，比如windows的<code>.dll</code>,linux系统的<code>.so</code>
+<code>/home</code>用户的home文件夹
+<code>/sbin</code>system binaries，只有root用户能用？
+<code>/tmp</code>系统文件，但是在RAM里不在disk上，所以重开机的时候会消失
+<code>/var</code>logs，caches，这种存在很久的文件
+<code>/dev</code> <code>/sys</code> <code>/proc</code>虚拟文件系统？“虚拟”是指 /dev、/sys 和 /proc 这些目录并非存储在硬盘上，而是在内存中动态生成的，它们是内核为用户和应用程序提供的一种抽象
+<img src="2024-02-25-192535.png" alt=""></p>
+<h2 id="2posix-shell">2.POSIX Shell</h2>
+<h3 id="21-the-shell">2.1 The Shell</h3>
+<h4 id="slides">Slides</h4>
+<p>Shell：CMD？Powershell？
+<img src="2024-01-30-15-07-22.png" alt="">
+prompt：用户输入提示
+但实际上
+<img src="2024-01-30-15-07-46.png" alt="">
+<code>$确实是Linux相关的</code>
+<img src="2024-01-30-15-27-14.png" alt="">
+<code>&gt;:在‘’中换行</code>
+<img src="2024-01-30-15-32-15.png" alt=""></p>
+<p><strong>builtin commands:</strong>
+<img src="2024-01-30-15-36-00.png" alt="">
+which cd是</p>
+<p><img src="2024-01-30-15-36-42.png" alt="">
+一些flag什么的
+-l：长格式显示信息
+-a：显示所有文件，包括一些<code>.</code> <code>..</code> 是隐藏文件
+<img src="2024-01-30-15-39-25.png" alt="">
+会列出各种flag代表什么意思
+<strong>Manuals：</strong>
+<img src="2024-01-30-15-41-08.png" alt="">
+实际上是查看手册
+<img src="2024-02-25-193338.png" alt="">
+<strong>Shell Expansions:</strong></p>
+<ol>
+<li><code>*</code>:匹配零个或多个字符
+比如说：<code>ls *.txt</code>匹配所有.txt开头的文件
+<code>ls *abc</code>匹配所有abc开头的文件
+（所以*的位置和开头结尾有关）</li>
+<li><code>?</code>匹配一个字符
+<img src="2024-01-30-15-51-52.png" alt="">
+有点不确定字符的意思，可以是任何？</li>
+<li><code>[ab]</code>单个字符范围匹配
+<img src="2024-01-30-15-51-07.png" alt=""></li>
+<li><code>$</code>变量<pre class="hljs"><code><div>my_variable=<span class="hljs-string">"Hello"</span>
+echo $my_variable
+</div></code></pre>
+</li>
+</ol>
+<p><strong>Shell Quoting</strong>
+<code>&quot;Double Quotes&quot;</code>字符被原样输出，特殊字符被解释
+<code>'single Quotes'</code>turn Off everything：所有东西都会被原样输出
+<code>\* \? \[ \$</code>Do not treat as pattern
+特殊字符不作为特殊字符处理
+<img src="2024-01-30-15-55-11.png" alt=""></p>
+<p><strong>cp mv find echo</strong>
+cp: copy
+<img src="2024-01-30-15-58-14.png" alt="">
+mv:move
+<img src="2024-01-30-15-58-25.png" alt="">
+find:search
+<img src="2024-01-30-15-59-11.png" alt=""></p>
+<p>echo:print
+<img src="2024-01-30-15-46-31.png" alt="">
+<img src="2024-01-30-15-57-24.png" alt=""></p>
+<h4 id="exercise">Exercise</h4>
+<p><strong>whitespace:</strong>
+<img src="2024-01-30-16-01-21.png" alt="">
+意思就是，只有在“”里面，space也算
+<strong>Pattern matching:</strong>
+<img src="2024-01-30-16-05-27.png" alt="">
+列出所有的文件
+<img src="2024-01-30-16-06-20.png" alt="">
+只显示了*，&quot;empty&quot; 文件夹为空，因此 ../arguments * 命令在该文件夹中执行时，shell 将 * 视为一个参数，而不是展开为文件名列表。</p>
+<p>find three different ways to get the program to produce the following output:</p>
+<pre class="hljs"><code><div>Argument #0: [./arguments]
+Argument #1: [*] 
+</div></code></pre>
+<p><img src="2024-01-30-16-11-35.png" alt="">
+<strong>Files with spaces in their names</strong>
+<img src="2024-01-26-16-11-50.png" alt="">
+<img src="2024-01-26-16-12-23.png" alt="">
+touch &quot;Silly named file&quot;-&gt;创建一个文件夹？
+touch Silly named file-&gt;创建3个文件 Silly named file
+ls sill+tab：
+<img src="2024-01-30-16-19-40.png" alt=""></p>
+<p>rm:
+<code>rm sill+tab</code>
+或者
+<code>rm &quot;silly named file&quot;</code></p>
+<p><strong>Shell variables</strong>
+注意：
+<img src="2024-01-30-16-24-19.png" alt="">
+<img src="2024-01-30-16-24-26.png" alt="">
+上面那个无法编译，因为被视作silly, name.c
+意思就是，在program赋值和后续调用的时候都需要用到<code>“”</code></p>
+<h3 id="22-pipes">2.2 Pipes</h3>
+<h4 id="slides">Slides</h4>
+<p>其实还是讲过unix philosophy的：
+<img src="2024-02-26-144938.png" alt="">
+1.每个program都应该do one thing well
+2.programs 可以联合起来完成更大的tasks
+3.universal interface shoulder be a text stream（文本流，是一种将文本数据视为连续流动的概念。Unix系统的设计哲学之一是将简单的工具通过标准输入（stdin）和标准输出（stdout）连接起来，形成一个数据处理管道。）
+讲下标准输入和标准输出：
+<img src="2024-01-30-16-33-21.png" alt="">
+<img src="2024-01-30-16-33-31.png" alt="">
+在计算机科学中，管道（Pipe）是一种用于在两个进程之间传递数据的机制。它允许一个进程的输出（stdout）直接成为另一个进程的输入（stdin），从而使这两个进程协同工作。
+<img src="2024-02-26-150307.png" alt="">
+<code>pipe</code>是将一个文件的输出变成另一个文件的输入
+<code>&gt;</code> <code>&gt;&gt;</code> <code>&lt;</code>这些重定向（redirection）是将输出等追加到文件或者作为输入</p>
+<p><strong>错误输出</strong>
+<code>COMMAND &gt; FILE 2&gt; FILE2</code>将COMMAND的标准输出到FILE，然后错误输出到FILE2
+<code>COMMAND&gt;FILE 2&gt;&amp;1</code>COMMAND的标准输出定向到FILE，然后错误也定向到<code>&amp;1</code>所在的文件
+<code>COMMAND &gt;&gt;FILE 2&gt;&amp;1</code>COMMAND指令的标准输出和标准输入都到FILE中，但是不覆盖</p>
+<p>但是，这个是错的<code>COMMAND 2&gt;&amp;1&gt;FILE</code>没有先规定1到哪，所以是从左到右顺序（？
+<code>COMMAND &gt; /dev/null</code>ignore output</p>
+<p><strong>FILES and STREAMS</strong>
+<code>PROGRAM &gt; FILE</code> 标准输出到FILE
+<code>PROGRAM &gt;&gt; FILE</code>标注输出到FILE但是不覆盖
+<code>PROGRAM &lt;FILE</code>FILE作为标准input给COMMAND执行
+<code>PROGRAM 2&gt; FILE</code>标准错误输出到FILE
+还有一个subshell：
+<code>COMMAND $(SOMETHING)</code>
+<img src="2024-02-26-152926.png" alt=""></p>
+<p><strong>Pipes</strong></p>
+<p><img src="2024-01-30-16-33-51.png" alt="">
+列出头/尾巴
+<code>ls -1 | head</code>从头开始列
+<code>ls -1| head -n 6</code>从头开始列，列6个结束
+<code>ls -1 | tail</code>
+<img src="2024-01-30-16-35-25.png" alt="">
+<strong>grep sort uniq</strong></p>
+<ol>
+<li>grep：文本搜索 &quot;global regular expression parser&quot;
+<img src="2024-01-30-17-15-29.png" alt=""></li>
+<li>sort： read all lines into buffer, sort, output
+<img src="2024-01-30-17-16-56.png" alt="">
+<img src="2024-01-30-17-17-31.png" alt="">
+默认：字母顺序
+<img src="2024-01-30-17-17-51.png" alt=""></li>
+<li>uniq
+remove duplicates immediately following
+best used as: command | sort | uni
+<img src="2024-01-30-17-18-36.png" alt="">
+<img src="2024-01-30-17-18-50.png" alt="">
+<img src="2024-01-30-17-18-56.png" alt=""></li>
+</ol>
+<p><strong>tee</strong>
+<img src="2024-02-26-152417.png" alt="">
+感觉像是又保存到另一个文件夹里，又print到屏幕上
+<strong>less</strong>
+在shell中打开某个文本
+<strong>sed</strong>
+替换替换
+用表达式s/ONE/TWO/[g]
+没有g只是替换第一个匹配到的，有了g就是全局替换
+<strong>subshell</strong></p>
+<h4 id="exercise">Exercise</h4>
+<ol>
+<li><strong>cat</strong>:打开文件
+cat 命令用于将一个或多个文件的内容输出到标准输出。
+例如：cat file1.txt file2.txt 将显示 &quot;file1.txt&quot; 和 &quot;file2.txt&quot; 的内容。</li>
+<li><strong>tail</strong>:显示末尾 head:显示头
+head 命令用于显示文件的开头部分，默认显示前 10 行。
+例如：head -n 20 file.txt 将显示文件 &quot;file.txt&quot; 的前 20 行。
+tail 命令用于显示文件的末尾部分，默认显示最后 10 行。
+例如：tail -n 30 file.txt 将显示文件 &quot;file.txt&quot; 的后 30 行。</li>
+<li><strong>sort</strong>:排序
+sort 命令用于对文本进行排序，默认按字典顺序排序。
+例如：sort file.txt 将对文件 &quot;file.txt&quot; 的内容进行排序。</li>
+<li><strong>uniq</strong>:删除重复行
+uniq 命令用于删除或显示文本中的重复行。
+例如：sort file.txt | uniq 可以用来删除文件 &quot;file.txt&quot; 中的重复行。</li>
+<li><strong>grep</strong>:搜索匹配
+grep 命令用于在文本中搜索匹配的行。
+例如：grep &quot;pattern&quot; file.txt 将显示文件 &quot;file.txt&quot; 中包含 &quot;pattern&quot; 的所有行。
+1.<strong>sed</strong>:编辑
+sed 命令用于对文本进行流编辑，根据指定的命令进行转换。
+例如：sed 's/old/new/' file.txt 将把文件 &quot;file.txt&quot; 中的每个匹配到的 &quot;old&quot; 替换为 &quot;new&quot;。</li>
+<li><strong>wc</strong>:统计
+wc 命令用于计算文件或标准输入中的字数、行数和字符数。
+例如：wc -l file.txt 将显示文件 &quot;file.txt&quot; 中的行数。</li>
+</ol>
+<p><strong>If English is not your native language, ignore the guessing part - it is not assessed.</strong></p>
+<ol>
+<li>The first word in the file. Can you guess what it will be?
+打开文件：cat | 找头:head
+cat words | head -n 1
+<img src="2024-01-26-16-40-14.png" alt=""></li>
+<li>The last word in the file. Can you guess this one?
+cat words | tail -n 1
+<img src="2024-01-26-16-41-03.png" alt=""></li>
+<li>The number of words in the words file - there is one word per line.
+cat words | wc -l
+统计：wc
+<img src="2024-01-26-16-42-50.png" alt=""></li>
+<li>The 6171st word in the file. Can you read my mind and guess this word directly?
+搜索：grep(为什么是sed？)
+<code>sed -n '6171p' words</code>
+<img src="2024-01-31-19-34-15.png" alt="">
+<img src="2024-01-26-16-45-00.png" alt=""></li>
+<li>All words containing the letter Q, capitalised. (A regular expression containing a string of one or more letters matches all strings that contain the expression as a substring.)
+替换：sed
+<code>sed 's/q/Q/g' words</code>
+<code>sed -i 's/q/Q/g' your_file.txt</code>
+不像显示打印就是这样
+<img src="2024-01-26-16-54-52.png" alt=""></li>
+<li>All words starting with the letter X. The regular expression X would match an X anywhere in the word, but ^X matches an X only at the start of the string.
+查找：grep
+<code>grep '^X' words</code>
+<code>sed -n '/^X/p' words</code>
+<code>-n</code>指只打印匹配行
+<code>-i</code>指不显示打印
+<code>s/[]/[]/g</code>s：替换; g：全局替换(global)
+<code>/^[]/p</code>^：是指开头是什么；p：打印(printf)
+<img src="2024-01-26-16-55-30.png" alt=""></li>
+<li>All words ending in j. (The expression 'j$' matches a j only at the end of the string, but you have to single-quote it to stop the shell from interpreting the dollar sign).
+查找：grep
+<code>grep 'j$' words</code>
+<code>sed -n /j'$'/p words</code>
+<img src="2024-01-26-16-56-02.png" alt=""></li>
+<li>The number of words containing the letter Q, ignoring case (e.g. capitalised or not).
+查找：grep | 统计：wc
+<code>grep -i 'q' words|wc -l</code>
+<code>-i</code> 忽略大小写ignore
+<code>-o</code> 仅输出匹配部分only
+<img src="2024-01-26-16-59-02.png" alt=""></li>
+<li>The first five words containing the letter sequence cl.
+查找：grep
+<code>grep 'cl' words|head -n 5</code></li>
+<li>All words containing the sequence &quot;kp&quot;, but not &quot;ckp&quot;. Can you guess any of these?
+感觉是正则表达式</li>
+</ol>
+<p><img src="2024-01-26-16-59-49.png" alt="">
+查找：grep
+<code>grep 'kp' words|grep -v 'ckp'</code>
+<code>-v</code>代表反向匹配（指排除？）</p>
+<ol>
+<li>
+<p>The last 15 words of exactly two letters. The expression . (period) matches a single character, and '^...$' for example would match all strings of the format exactly three characters between start and end of string. You need to quote it because of the dollar sign.
+<code>grep '^..$'|tail -n 15</code>
+<img src="2024-01-31-20-04-18.png" alt="">
+一个.代表一个字符</p>
+</li>
+<li>
+<p>All words from the first 100 words on the list, which contain the letter y.
+<code>cat words|head -n 100|grep 'y'</code>
+<code>cat words|head -n 100|grep 'y'</code></p>
+</li>
+<li>
+<p>The first five words that are among the last 100 words on the list, and contain the letter y (whether capitalised or not).
+<code>tail -n 100|grep -i 'y'|head -n 5</code>
+<code>tail -n 100 words | grep -i 'y' | head -n 5</code></p>
+</li>
+<li>
+<p>All three-letter words with no vowels (aeiou).The regular expression '[aeiou]' matches any string that contains one of the bracketed characters; you need quotes to stop the shell from interpreting the brackets. Remember to exclude words with capitalised vowels as well. There are 343 of these.
+<code>grep '^...$' |grep -g -v `[aeiou]` words|wc -l</code>
+<img src="2024-01-31-20-16-37.png" alt="">----22
+<code>grep -i -w -v '[aeiouy]' words | grep -w '^...$'|wc -l</code>----536 ?????????
+<code>grep -Ei ^[^aeiou]{3}$ words</code></p>
+</li>
+<li>
+<p>All words of exactly 7 letters, where the third one is an e and the word ends &quot;-ded&quot;. This kind of search is really useful for crosswords. There are 14 words of this form, can you guess them?
+<code>grep -i -w '^..e....ded$' words</code>-------4?????
+<code>grep -iE ^[a-z]{2}e[a-z]{1}ded$ words</code></p>
+</li>
+</ol>
+<h3 id="22-regular-expressions">2.2 Regular expressions</h3>
+<ol>
+<li>
+<p>Study the documentation for the -w option. Contrive a file such that grep PATTERN FILE returns two different lines but grep -w PATTERN FILE returns only one line.
+<img src="2024-01-31-20-26-15.png" alt="">
+<img src="2024-01-31-20-26-56.png" alt="">
+就是 -w 是完全匹配，不加是部分匹配的意思</p>
+</li>
+<li>
+<p>You'll have seen beforehand that you can count the results of a search with grep PATTERN FILE | wc -l. However, grep also has a -c option which counts matches. Can you find the situation where the wc -l approach and the -c approach produce different results? Can you explain why?
+<code>-c</code>
+<code>wc -l</code>统计的是行数
+<img src="2024-01-31-20-39-58.png" alt="">
+<img src="2024-01-31-20-40-26.png" alt=""></p>
+</li>
+</ol>
+<p><img src="2024-01-31-20-40-55.png" alt="">
+(????)但是实际输出是一样的哦
+3. Some words have different spelling between British English and American English. For example, 'encyclopaedia' is valid in British English but not American. Can you write a regular expression that would match both of these words, but nothing else? How about matching both 'color' (American) and 'colour' (British)?
+<code>grep -E 'colou?r' ex3</code></p>
+<pre class="hljs"><code><div></div></code></pre>
+<ol start="4">
+<li>UK postcodes follow a general schema of two letters followed by one number, followed by an optional space, then another number, followed by two more letters. Can you write a regular expression that would match such sequences?
+<code>^[A-Z]{2}\d{1,2} ?\d[A-Z]{2}$ </code>
+<img src="2024-01-31-20-54-09.png" alt=""></li>
+<li>In practice, the above is a simplified version of the system, and a better UK postcode validator regex is known to be<code>^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$.</code>Try breaking apart this monster to understand what is being tested, and find an example that would match the schema described for the fourth question but fail to match this expression.</li>
+</ol>
+<pre class="hljs"><code><div>
+^(
+  ([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}
+  |BFPO ?[0-9]{1,4}
+  |(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}
+  |[A-Z]{2} ?[0-9]{2}
+  |GE ?CX|GIR ?0A{2}|SAN ?TA1
+)$
+
+
+</div></code></pre>
+<p><img src="2024-02-13-19-25-47.png" alt="">
+<img src="2024-02-13-19-30-24.png" alt="">
+https://regexone.com/lesson/nested_groups
+总之可以玩玩这个
+<img src="2024-02-26-163039.png" alt=""></p>
+<h1 id="week-2version-control">Week 2：Version Control</h1>
+<h2 id="3git">3.Git</h2>
+<h4 id="slides">Slides</h4>
+<p>git我个人理解大概就是一个版本控制的东西大概分为以下几类</p>
+<ol>
+<li>个人本地仓库
+一般是git init初始化，git add之后 git commit一下
+然后查看git status状态，和git log查看版本控制日志
+git checkout HASH退回版本</li>
+<li>branch的意思
+一般有main/master这种主枝干和branch这类分支，更像是团队合作的东西
+git branch NAME（创建一个新的分支）
+git checkout NAME （切换到这个分支）
+另外还有git merge git rebase这类合并分支的东西</li>
+<li>和远程仓库链接</li>
+</ol>
+<h4 id="exercise">Exercise</h4>
+<p><strong>老三套</strong>
+<code>git init</code>初始化
+<code>git status</code>检查状态
+创建一个file<code>.gitignore</code>将想忽略的扔进去
+<img src="2024-02-02-14-18-30.png" alt="">
+<code>git add .</code>将所有变动的地方加到master branch里
+<code>git commit -m &quot;Initial commit&quot;</code>添加comments
+<code>git log</code>检查状态
+<img src="2024-02-02-14-26-35.png" alt="">
+<code>git log|less</code>记下退回状态的的hash数字
+<code>git checkout HASH</code>
+<img src="2024-02-02-14-33-15.png" alt="">
+确实退回去了(?!!)这就是版本控制
+<code>git checkout master</code>to return to the latest version of your files, and git will set up the HEAD pointer again ready to accept new commits
+<strong>Part 2: Git forges</strong>
+ssh
+<code>git clone SSH</code>
+<strong>Practice the push workflow</strong>
+<code>rebase</code>
+<code>merge</code> 会有merge request 什么的
+<strong>Resolve a fake conflict, part one</strong></p>
+<p><strong>Fake conflicts, part two</strong></p>
+<p><strong>Resolving a real conflict</strong></p>
+<p><img src="2024-02-02-16-34-43.png" alt="">
+实际上
+<code>git checkout -b NAME</code>执行了两个操作，创建branch并且切换到对应的地方
+更好记的话应该是 <code>git branch</code>
+<img src="2024-02-07-19-27-09.png" alt=""></p>
+<p>同时，<code>git push -u origin NAME</code>将branch和远程联系起来，但是更好记（
+之后就可以美美<code>git push</code>和 <code>git pull</code>了</p>
+<h1 id="week-3shell-scripting--build-tools">Week 3：Shell Scripting &amp; Build Tools</h1>
+<h2 id="4shell-scripting">4.Shell Scripting</h2>
+<h3 id="41-file-permissions">4.1 File permissions</h3>
+<p><img src="2024-02-12-23-00-19.png" alt="">
+一开始是root：
+<img src="2024-02-12-23-00-57.png" alt="">
+大概讲了下group、owner和others的东西，还有密码储存的位置</p>
+<p><img src="2024-02-12-23-05-04.png" alt="">
+<img src="2024-02-12-23-06-17.png" alt="">
+<img src="2024-02-12-23-07-12.png" alt="">
+<img src="2024-02-12-23-12-35.png" alt="">
+所以这个755是这么来的
+<strong>weird bit</strong>
+它上面提到过sticky point
+<img src="2024-02-12-23-14-51.png" alt=""></p>
+<p><strong>韩顺平：</strong></p>
+<ol>
+<li>文件有三个文件模型：owners，group，others</li>
+<li>创建用户，是下面的那种</li>
+<li>创建一个文件并且修改权限：
+<img src="2024-02-15-18-44-30.png" alt=""></li>
+<li>改变用户所在组
+<img src="2024-02-15-18-51-52.png" alt=""></li>
+<li>bits(rwx)
+<img src="2024-02-15-18-54-06.png" alt="">
+<img src="2024-02-15-18-54-22.png" alt=""></li>
+<li>修改权限
+<img src="2024-02-15-19-09-29.png" alt="">
+<img src="2024-02-15-19-11-26.png" alt="">
+chmod u=rwx,g=rx,o=rx abc
+chmod u-x,g+w abc
+chmod a+r abc
+或者用数字来
+read（4） write（2） execute（1）（bit）
+所以才有什么chmod 755 file（owner（4+2+1），group（4+1），others（4+1）</li>
+<li>修改文件所有人-chown
+<img src="chown newowner .png" alt="">
+修改文件or目录所在组-chgrp
+<img src="2024-02-15-19-14-29.png" alt=""></li>
+</ol>
+<p><strong>栗子</strong>
+<img src="2024-02-15-20-05-14.png" alt="">
+sudo groupadd police
+sudo groupadd bandit
+sudo useradd jack
+sudo useradd  jerry
+sudo useradd  xh
+sudo useradd xq
+sudo usermod -aG police jack
+sudo usermod -aG police jerry
+或者这样：
+<img src="2024-02-15-20-10-00.png" alt="">
+修改权限就是usermod
+<img src="2024-02-15-20-12-54.png" alt=""></p>
+<p><strong>小总结</strong>
+<code>useradd</code>添加用户
+<code>groupadd</code>添加组
+<code>usermod -g groupname username</code>用户添加到组里
+<code>usermod -d reponame username</code>用户初始登录文件位置
+<code>passwd</code>设置用户密码</p>
+<p><code>chgrp 组名 文件名</code>修改文件所在的组
+<code>chmod 权限 文件</code>修改权限
+<code>chown newowner file/repo</code>改变文件或者目录的所有者</p>
+<h4 id="exercise">Exercise</h4>
+<p>直接用unix系统做，需要在lab上跑一遍
+vagrant up -&gt;vagrant ssh
+<strong>Create a user and a group</strong>
+<code>sudo adduser NAME</code>加名字
+<img src="2024-02-13-12-14-26.png" alt="">
+创立新的user，设置密码，切换到该user下面
+<code>su ADA</code>切换到ADA user下面
+<code>pwd</code>检查确实在user/home/下面
+<code>exit</code>回到host
+然后再次创建一个，并添加到一个组里面
+<code>sudo addgroup USER</code>添加组USER（反正addgroup和groupadd总有一个）
+<img src="2024-02-13-12-37-52.png" alt="">将ADA和brian扔到组里
+<img src="2024-02-13-12-37-30.png" alt="">这样就是一个组里了</p>
+<p><strong>Explore file permissions</strong>
+<img src="2024-02-13-12-33-22.png" alt="">
+<img src="2024-02-13-12-44-10.png" alt="">
+<img src="2024-02-13-12-45-04.png" alt="">
+这个做的我好烦躁（</p>
+<h3 id="42-shell-scripting">4.2 Shell Scripting</h3>
+<h4 id="slides">Slides</h4>
+<p><img src="2024-02-15-12-25-21.png" alt="">
+还讲了一下环境变量的东西，但是我觉得不一定是重点，考都没考x
+<strong>shellcheck</strong>
+vim xxx.sh
+ctrl+v:vision mode
+光标选择+d</p>
+<p><strong>变量</strong>
+<img src="2024-02-13-22-56-43.png" alt="">
+unset是取消赋值
+其他的比如<code>$?</code>是exit code，检查和输出错误信息
+<img src="2024-02-26-173758.png" alt="">
+这个就是，0其实表示success，而大于0的是错误信息？
+<img src="2024-02-13-22-59-50.png" alt="">
+<img src="2024-02-15-12-26-06.png" alt="">
+<strong>标准变量</strong>
+<img src="2024-02-13-22-55-18.png" alt="">
+<img src="2024-02-15-12-27-43.png" alt="">
+<img src="2024-02-15-12-28-24.png" alt="">
+<strong>if 判断语句</strong>
+[]
+<strong>case 跳转语句</strong></p>
+<p><img src="2024-02-15-12-29-09.png" alt=""></p>
+<h4 id="exercise">Exercise</h4>
+<p>https://missing-semester-cn.github.io/2020/shell-tools/
+参考一下这个
+<img src="2024-02-13-16-12-29.png" alt="">
+<img src="2024-02-13-16-12-45.png" alt=""></p>
+<p><img src="2024-02-13-16-08-04.png" alt="">
+写一个脚本called b
+1.在各种shell里都通用的
+2.compile NAME 一个C文件，同时接受hello.c 和hello
+3.如果该文件不存在，则报错
+4.run NAME
+5.build NAME
+6.COMMAND 或者./b 打印手册</p>
+<pre class="hljs"><code><div><span class="hljs-comment">#!/bin/sh</span>
+
+<span class="hljs-keyword">if</span> [ $<span class="hljs-comment"># -eq 0 ]; then</span>
+    echo <span class="hljs-string">"Usage: $0 COMMAND [NAME]"</span>
+    echo <span class="hljs-string">"Commands: compile, run, build"</span>
+    exit <span class="hljs-number">1</span>
+fi
+
+command=<span class="hljs-string">"$1"</span>
+name=<span class="hljs-string">"$2"</span>
+
+case <span class="hljs-string">"$command"</span> <span class="hljs-keyword">in</span>
+    compile)
+        <span class="hljs-keyword">if</span> [ -z <span class="hljs-string">"$name"</span> ]; then
+            echo <span class="hljs-string">"Error: Missing filename for compile command."</span>
+            exit <span class="hljs-number">1</span>
+        fi
+
+        <span class="hljs-keyword">if</span> [ ! -f <span class="hljs-string">"$name"</span> ]; then
+            <span class="hljs-keyword">if</span> [ -f <span class="hljs-string">"$name.c"</span> ]; then
+                name=<span class="hljs-string">"$name.c"</span>
+            <span class="hljs-keyword">else</span>
+                echo <span class="hljs-string">"Error: Source file '$name' not found."</span>
+                exit <span class="hljs-number">1</span>
+            fi
+        fi
+
+        gcc -Wall -std=c11 -g <span class="hljs-string">"$name"</span> -o <span class="hljs-string">"${name%%.*}"</span>
+        ;;
+    run)
+        <span class="hljs-keyword">if</span> [ -z <span class="hljs-string">"$name"</span> ]; then
+            echo <span class="hljs-string">"Error: Missing program name for run command."</span>
+            exit <span class="hljs-number">1</span>
+        fi
+
+        <span class="hljs-keyword">if</span> [ ! -x <span class="hljs-string">"$name"</span> ]; then
+            <span class="hljs-keyword">if</span> [ -x <span class="hljs-string">"$name.c"</span> ]; then
+                name=<span class="hljs-string">"$name.c"</span>
+            <span class="hljs-keyword">else</span>
+                echo <span class="hljs-string">"Error: Program '$name' not found."</span>
+                exit <span class="hljs-number">1</span>
+            fi
+        fi
+
+        ./<span class="hljs-string">"$name"</span>
+        ;;
+    build)
+        <span class="hljs-keyword">if</span> [ -z <span class="hljs-string">"$name"</span> ]; then
+            echo <span class="hljs-string">"Error: Missing filename for build command."</span>
+            exit <span class="hljs-number">1</span>
+        fi
+
+        ./b compile <span class="hljs-string">"$name"</span>
+        <span class="hljs-keyword">if</span> [ $? -eq <span class="hljs-number">0</span> ]; then
+            ./b run <span class="hljs-string">"${name%%.*}"</span>
+        fi
+        ;;
+    *)
+        echo <span class="hljs-string">"Usage: $0 COMMAND [NAME]"</span>
+        echo <span class="hljs-string">"Commands: compile, run, build"</span>
+        exit <span class="hljs-number">1</span>
+        ;;
+esac
+
+exit <span class="hljs-number">0</span>
+</div></code></pre>
+<p>这个主要看cheat sheet 写也可以？？？</p>
+<h2 id="building-tools">Building Tools</h2>
+<p>这个我看都是在教安装（</p>
+<h1 id="week-4-debugging">Week 4: DEBUGGING</h1>
+<p>主要是GDB</p>
+<h1 id="week-5-sql">Week 5: SQL</h1>
+<h2 id="basic">Basic</h2>
+<p><strong>SELECT</strong>
+选择多少列
+<code>AS</code>
+<strong>FROM</strong>
+从哪个
+<strong>WHERE</strong>
+一个条件语句，标准日期是&quot;YYYY-MM-DD&quot;
+<code>AND</code> <code>OR</code> <code>NOT</code>
+<code>BETWEEN</code>:AND多项选择
+<code>IN</code>:OR多项选择</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_store;
+
+<span class="hljs-keyword">SELECT</span> *
+<span class="hljs-keyword">FROM</span> customers
+<span class="hljs-keyword">WHERE</span> quantity <span class="hljs-keyword">IN</span> (<span class="hljs-number">49</span>,<span class="hljs-number">38</span>,<span class="hljs-number">72</span>)
+</div></code></pre>
+<p><code>LIKE</code> %：无论有多少个
+<code>REGEXP</code>使用正则表达式
+<strong>ORDER BY</strong>
+<strong>LIMIT</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_store;
+
+<span class="hljs-keyword">SELECT</span> *
+<span class="hljs-keyword">FROM</span> customers
+<span class="hljs-keyword">WHERE</span> customer_id=<span class="hljs-number">1</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> first_name
+</div></code></pre>
+<h2 id="join">Join</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> column1, column2, ...
+<span class="hljs-keyword">FROM</span> table1
+<span class="hljs-keyword">JOIN</span> table2 <span class="hljs-keyword">ON</span> condition;
+</div></code></pre>
+<p>INNER JOIN：如果表中有至少一个匹配，则返回行
+LEFT JOIN：即使右表中没有匹配，也从左表返回所有的行
+RIGHT JOIN：即使左表中没有匹配，也从右表返回所有的行
+FULL JOIN：只要其中一个表中存在匹配，则返回行</p>
+<p><strong>内连接</strong></p>
+<ol>
+<li>跨数据库连接：</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_store;
+
+<span class="hljs-keyword">SELECT</span> *
+<span class="hljs-keyword">FROM</span> order_items oi
+<span class="hljs-keyword">JOIN</span> sql_inventory.products p
+	<span class="hljs-keyword">ON</span> oi.product_id=p.product_id
+</div></code></pre>
+<ol start="2">
+<li>自链接
+使用不同的别名</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_hr;
+<span class="hljs-keyword">SELECT</span> e.employee_id,
+		e.first_name,
+        m.first_name <span class="hljs-keyword">AS</span> manager
+<span class="hljs-keyword">FROM</span> employees e
+<span class="hljs-keyword">JOIN</span> employees m
+	<span class="hljs-keyword">ON</span> e.reports_to=m.employee_id
+</div></code></pre>
+<ol start="3">
+<li>多表链接</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_store;
+
+<span class="hljs-keyword">SELECT</span> 
+	o.order_id,
+    o.order_date,
+    c.first_name,
+    c.last_name,
+    os.name <span class="hljs-keyword">AS</span> <span class="hljs-keyword">status</span>
+<span class="hljs-keyword">FROM</span> orders o
+<span class="hljs-keyword">JOIN</span> customers c
+	<span class="hljs-keyword">ON</span> o.customer_id=c.customer_id
+<span class="hljs-keyword">JOIN</span> order_statuses os
+	<span class="hljs-keyword">ON</span> o.status=os.order_status_id
+</div></code></pre>
+<p>注意这里的链接condintion，做了exercise才发现有哪里不对= =</p>
+<p>还有一个natural join：就是让数据库自己检测
+cross join：第一个表的所有，和第二个表的所有</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">SELECT</span> 
+        c.first_name <span class="hljs-keyword">AS</span> customers
+        p.name <span class="hljs-keyword">AS</span> product
+    <span class="hljs-keyword">FROM</span> customers c
+    <span class="hljs-keyword">CROSS</span> <span class="hljs-keyword">JOIN</span> prodcuts p
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> c.first_name
+</div></code></pre>
+<ol start="4">
+<li>Unions</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">USE</span> sql_store;
+<span class="hljs-keyword">SELECT</span> 
+	order_id,
+    order_date,
+    <span class="hljs-string">'Active'</span> <span class="hljs-keyword">AS</span> <span class="hljs-keyword">status</span>
+<span class="hljs-keyword">FROM</span> orders
+<span class="hljs-keyword">WHERE</span> order_date &gt;<span class="hljs-string">'2019-01-01'</span>
+<span class="hljs-keyword">UNION</span>
+<span class="hljs-keyword">SELECT</span> 
+	order_id,
+    order_date,
+    <span class="hljs-string">'Archived'</span> <span class="hljs-keyword">AS</span> <span class="hljs-keyword">status</span>
+<span class="hljs-keyword">FROM</span> orders
+<span class="hljs-keyword">WHERE</span> order_date &lt;=<span class="hljs-string">'2019-01-01'</span>;
+</div></code></pre>
+<p>UNION：MySQL UNION 操作符用于连接两个以上的 SELECT 语句的结果组合到一个结果集合，并去除重复的行。
+UNION 操作符必须由两个或多个 SELECT 语句组成，每个 SELECT 语句的列数和对应位置的数据类型必须相同</p>
+<h2 id="column">Column</h2>
+<p><code>INT</code> <code>VARCHAR</code> <code>DATE</code> <code>CHAR</code>
+PK:primary key
+NN:not NULL(选了就是不允许有null)
+AI:自动增递
+default/expression：NULL或者'0'
+<img src="2024-02-20-17-16-08.png" alt=""></p>
+<p>1.插入单行</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> cutomers(
+    first_name,
+    last_name,
+    birth_date,
+    address,
+    city,
+    state
+)
+<span class="hljs-keyword">VALUE</span>(
+<span class="hljs-string">'Hannah'</span>,
+<span class="hljs-string">'Smith'</span>,
+<span class="hljs-string">'address'</span>,
+<span class="hljs-string">'city'</span>,
+<span class="hljs-string">'CA'</span>)
+</div></code></pre>
+<p>是有DEFAULT这个东西的,但是如果上面不写的话，实际上是可以去掉的，如果上面是这样的话
+2. 插入多行</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> shippers(<span class="hljs-keyword">name</span>)
+<span class="hljs-keyword">VALUES</span> (<span class="hljs-string">'shippers'</span>),
+    (<span class="hljs-string">'shippers2'</span>),
+    (<span class="hljs-string">'shippers3'</span>)
+</div></code></pre>
+<ol start="3">
+<li>插入分层行
+在多张表中插入行
+parent-child relationship
+<code>LAST_INSERT_ID()</code>
+<img src="2024-02-20-19-37-30.png" alt=""></li>
+<li>创建表复制</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> orders_archived
+<span class="hljs-comment">--archived是一个新的表</span>
+
+<span class="hljs-keyword">SELECT</span> *
+<span class="hljs-keyword">FROM</span> orders
+<span class="hljs-keyword">WHERE</span> order_date &lt; <span class="hljs-string">'2019-01-01'</span>
+</div></code></pre>
+<ol start="5">
+<li>更新</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">UPDATE</span> invoices
+<span class="hljs-keyword">SET</span> payment_total=<span class="hljs-number">10</span>,
+payment_date=<span class="hljs-string">'2019-03-01'</span>
+<span class="hljs-keyword">WHERE</span> invoice_id=<span class="hljs-number">1</span>
+</div></code></pre>
+<ol start="6">
+<li>删除</li>
+</ol>
+<pre class="hljs"><code><div>WHERE invoice_id = 
+      (SELECT *
+      FROM clients
+      WHERE name='Myworks')
+</div></code></pre>
+<p>到他的第五章了，之后在慢慢看，现在开始做school的内容</p>
+<h2 id="school-tutorial">School Tutorial</h2>
+<p><img src="2024-02-21-17-48-16.png" alt=""></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> student(
+    <span class="hljs-keyword">name</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    <span class="hljs-built_in">number</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    PRIMARY <span class="hljs-keyword">KEY</span>(<span class="hljs-built_in">number</span>)
+);
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> unit(
+    <span class="hljs-keyword">name</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    <span class="hljs-built_in">number</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    PRIMARY <span class="hljs-keyword">KEY</span>(<span class="hljs-built_in">number</span>)
+);
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> unit(
+    <span class="hljs-keyword">name</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    <span class="hljs-built_in">number</span> <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+    PRIMARY <span class="hljs-keyword">KEY</span>(<span class="hljs-built_in">number</span>)
+);
+</div></code></pre>
+<p><img src="2024-02-21-19-43-25.png" alt="">
+<img src="2024-02-21-19-43-34.png" alt="">
+但是打下来会报错是因为number作为主键没有设置大小）</p>
+<p><code>USE &lt;database&gt;;</code>切换到该数据库
+<code>SHOW TABLE;</code>显示表格
+<code>DESCRIBE &lt;TABLE&gt;;</code>查看具体类型
+<img src="2024-02-21-19-49-23.png" alt="">
+<strong>PRIMARY KEY</strong>：
+<strong>UNI KEY</strong>唯一约束：
+唯一约束确保一列或一组列中的所有值都是唯一的。
+与主键不同，唯一约束允许包含NULL值（除非在受约束的列或列组中）</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> employees (
+    employee_id <span class="hljs-built_in">INT</span> PRIMARY <span class="hljs-keyword">KEY</span>,
+    email <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">UNIQUE</span>,
+    department_id <span class="hljs-built_in">INT</span>
+);
+
+</div></code></pre>
+<p><strong>MUL</strong>外键
+外键是一个表中一列或一组列，它引用另一张表的主键。
+它建立了两个表之间的链接，创建了一种关系。
+它确保引用完整性，意味着外键列中的值必须与引用表的主键匹配。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> courses (
+    course_id <span class="hljs-built_in">INT</span> PRIMARY <span class="hljs-keyword">KEY</span>,
+    course_name <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>)
+);
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> enrollments (
+    enrollment_id <span class="hljs-built_in">INT</span> PRIMARY <span class="hljs-keyword">KEY</span>,
+    student_id <span class="hljs-built_in">INT</span>,
+    course_id <span class="hljs-built_in">INT</span>,
+    <span class="hljs-keyword">FOREIGN</span> <span class="hljs-keyword">KEY</span> (student_id) <span class="hljs-keyword">REFERENCES</span> students(student_id),
+    <span class="hljs-keyword">FOREIGN</span> <span class="hljs-keyword">KEY</span> (course_id) <span class="hljs-keyword">REFERENCES</span> courses(course_id)
+);
+
+</div></code></pre>
+<h2 id="exercise">Exercise</h2>
+<h3 id="election">election</h3>
+<ol>
+<li>List the names of all parties that stood in the election, ordered alphabetically by name.
+<img src="2024-02-21-19-57-15.png" alt=""></li>
+<li>List the names of all parties that stood in the Bedminster ward.
+<img src="2024-02-21-20-10-26.png" alt="">
+SELECT DISTINCT 是不列重复项的意思
+把party、ward对应的数字变成对应的name，然后查找Ward.name是bedminister的</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Candidate
+<span class="hljs-keyword">JOIN</span> Party <span class="hljs-keyword">ON</span> Party.id=Candidate.party
+<span class="hljs-keyword">JOIN</span> Ward <span class="hljs-keyword">ON</span> Ward.id=Candidate.ward
+<span class="hljs-keyword">WHERE</span> Ward.name=<span class="hljs-string">'Bedminster'</span>;
+</div></code></pre>
+<p>Simplify:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> Party.name <span class="hljs-keyword">FROM</span> Candidate
+<span class="hljs-keyword">JOIN</span> Party <span class="hljs-keyword">ON</span> Party.id=Candidate.party
+<span class="hljs-keyword">JOIN</span> Ward <span class="hljs-keyword">ON</span> Ward.id=Candidate.ward
+<span class="hljs-keyword">WHERE</span> Ward.name=<span class="hljs-string">'Bedminster'</span>;
+</div></code></pre>
+<ol>
+<li>How many votes did Labour get in the Stockwood ward?
+<img src="2024-02-21-20-16-48.png" alt="">
+要的是votes，所以在Candidate里面选择votes
+然后两个子查询：
+条件1是：Party是Labour-&gt;Candidate的都是id，所以要在Party里面找 name='Labour'，并且返回对应的id
+条件2是：Ward是Stockwood-&gt;Candidate的都是id，所以要在Ward里面找 name='Stockwood'，并且返回对应的id</li>
+<li>List the names, parties and number of votes obtained for all candidates in the Southville ward. Order the candidates by number of votes obtained descending (winner comes first).</li>
+</ol>
+<p>还没扔进去看</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> Candidate.name, Party.name,Candidate.votes <span class="hljs-keyword">AS</span> <span class="hljs-keyword">name</span>,party,votes
+<span class="hljs-keyword">FROM</span> Candidate
+<span class="hljs-keyword">JOIN</span> Ward <span class="hljs-keyword">ON</span> Ward.id=Candidate.ward
+<span class="hljs-keyword">JOIN</span> Party <span class="hljs-keyword">ON</span> Party.id=Candidate.party
+<span class="hljs-keyword">WHERE</span> Ward.name=<span class="hljs-string">'Southville'</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> Candidate.votes <span class="hljs-keyword">DESC</span>;
+</div></code></pre>
+<ol start="3">
+<li>List the name, party and number of votes obtained for the winner only in the Knowle ward. (Hint: apart from changing the ward name, you only need one small modification to the statement from the last question. You may assume no ties.)
+还没扔进去看x</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> Candidate.name, Party.name,Candidate.votes <span class="hljs-keyword">AS</span> <span class="hljs-keyword">name</span>,party,votes
+<span class="hljs-keyword">FROM</span> Candidate
+<span class="hljs-keyword">JOIN</span> Ward <span class="hljs-keyword">ON</span> Ward.id=Candidate.ward
+<span class="hljs-keyword">JOIN</span> Party <span class="hljs-keyword">ON</span> Party.id=Candidate.party
+<span class="hljs-keyword">WHERE</span> Ward.name=<span class="hljs-string">'Knowle'</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> Candidate.votes <span class="hljs-keyword">DESC</span>
+<span class="hljs-keyword">LIMIT</span> <span class="hljs-number">1</span>;
+</div></code></pre>
+<p><img src="2024-02-21-19-55-32.png" alt=""></p>
+<h3 id="the-2011-uk-census">The 2011 UK Census</h3>
+<p><img src="2024-02-21-20-38-25.png" alt=""></p>
+<ol>
+<li>
+<p>The university of Bristol is situated in the Cabot ward (ward names are not always distinct, but this one is). Find the names and codes of the CLU, region and country containing the Cabot ward (CLU = county level unit = &quot;row in County table&quot;).</p>
+</li>
+<li>
+<p>If you used multiple SQL queries for the last question, do it in one single query now. (In other words, find a join strategy for the tables you need.)</p>
+</li>
+<li>
+<p>Find the number of women in occupation class 1 (managers etc.) in the Cabot ward. You may use ward code for Cabot that you found in the first query and the occupation id 1 directly - you do not need any JOINs for this query.</p>
+</li>
+<li>
+<p>For the Stoke Bishop ward (E05002003), list the 9 occupation class names and the number of men in each occupation. Your table should have two columns called name and number. You can use the provided ward code, you do not need to join on the ward name.</p>
+</li>
+</ol>
+<h3 id="intermediate-sql">Intermediate SQL</h3>
+<p><strong>Election</strong></p>
+<ol>
+<li>How many votes were cast in all of Bristol in the 2014 elections?</li>
+<li>How many votes were cast in the 'Windmill Hill' ward and what percentage of the electorate in this ward does this represent? Your statement should produce a table with one row and two columns called 'votes' and 'percentage'.</li>
+<li>List the names, parties and percentage of votes obtained for all candidates in the Southville ward. Order the candidates by percentage of votes obtained descending.</li>
+<li>How successful (in % of votes cast) was the Conservative party in each ward?</li>
+<li>Which rank did Labour end up in the 'Whitchurch Park' ward? Your statement should produce a table with a single row and column containing the answer as a number. You can assume no ties.</li>
+<li>What is the total number of votes that each party got in the elections? Your result should be a table with two columns party, votes.</li>
+<li>Find all wards where the Green party beat Labour and create a table with two columns ward, difference where the difference column is the number of Green votes minus the number of Labour votes. Your table should be ordered by difference, with the highest one first.
+<strong>Census</strong></li>
+<li>How many women work in sales and customer service occupations and live in the Cabot ward of Bristol (E05001979)?</li>
+<li>How many people work in sales and customer service occupations and live in the Cabot ward of Bristol (E05001979)?</li>
+<li>How many people work in caring, leisure and other service occupations (occupation class 6) in all of the City of Bristol CLU (E06000023)?</li>
+<li>In the Cabot ward (E05001979), produce a table listing the names of the 9 occupation classes and the number of people in each of the classes in this ward.</li>
+<li>Find the working population, ward name and CLU name for the smallest ward (by working population) in the 2011 census.</li>
+<li>The same as the last question, but now produce a table with two rows, one for the smallest and one for the largest ward. There's no quicker way than repeating the last query twice, the question is how to stick the two &quot;copies&quot; together.</li>
+<li>Find the average size of a ward's working population in the London (E12000007) region.
+The same as the last question but now for every region - your query should produce a table with one row per region. The intention here is not to repeat the above query 9 times.</li>
+<li>Produce a table that lists, for each of the 9 regions of England, the percentage of people in managerial (class 1) occupations who are women.</li>
+<li>For all CLUs in the London (E12000007) region, produce a table with three columns called CLU, occupation and count such that:
+CLU is the CLU name.
+count is the number of people of the occupation class in question in the given CLU.
+occupation is the name of the occupation class.
+Only rows with count &gt;= 10000 appear in the table.
+The table is sorted by count ascending.</li>
+<li>Create a table with three columns occupation, women and men and one row per occupation class. The occupation column should list the occupation class names. The women and men columns in each row should list the total number of women resp. men in the row's occupation class in the whole dataset. The intention here is not to have to copy-paste a subquery 9 times.</li>
+<li>The same as question 9, but now with a 10th row in the table listing the value for all of England. You can use the string 'England' for the region column.</li>
+</ol>
+<h2 id="jdbc">JDBC</h2>
+<h1 id="mid-term">Mid-Term</h1>
+<ol>
+<li>shell</li>
+<li>git</li>
+<li></li>
+</ol>
+<h2 id="undergrad-paper-1">Undergrad paper 1</h2>
+<h3 id="q3">Q3</h3>
+<pre class="hljs"><code><div>$ git fetch
+ssh: Could not resolve hostname github.com: no address associated with name
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+What is the issue?
+A. Their public key has not been correctly set up on Github.
+B. The repository doesn’t exist; they need to create it before they can pull;
+C. There is a merge conflict
+D. Their network is down or misconfigured.
+</div></code></pre>
+<p>The answer is D. Maybe because it has something to do with SSH
+A. fatal: repository 'repository_url' not found
+B. Permission denied (publickey).
+C. CONFLICT (content): Merge conflict in filename</p>
+<h3 id="q5">Q5</h3>
+<pre class="hljs"><code><div>When running a command into their favourite pager more (so they can scroll it on the
+terminal) Alice notices the following unusual output. What is going on, and what are the
+weird ESC[01;34m bits?
+$ ls --color=always | more
+ESC[0mESC[01;34mBackupsESC[0m
+ESC[01;34mDesktopESC[0m
+ESC[01;34mDocumentsESC[0m
+ESC[01;36mDownloadsESC[0m
+ESC[01;34mMailESC[0m
+ESC[01;34mMusicESC[0m
+ESC[01;36mNotesESC[0m
+ESC[01;34mPicturesESC[0m
+ESC[01;34mReposESC[0m
+ESC[01;34mVideosESC[0m
+mbox
+- (END)
+</div></code></pre>
+<p>I don't think that is is concluded in the class.</p>
+<h3 id="q6">Q6</h3>
+<pre class="hljs"><code><div>Bob has the following id:
+$ id
+uid=1000(bob) gid=800(users) groups=800(users)
+The passwd program has the following permissions:
+$ ls -l `command -v passwd`
+-r-sr-sr-x 1 root bin 21112 Feb 12 00:27 /usr/bin/passwd
+What user and group will it run as?
+A. uid=root, gid=bin
+B. uid=root, gid=users
+C. uid=bob, gid=users
+D. uid=bob, gid=bin
+</div></code></pre>
+<p>A.</p>
+<ul>
+<li>用户权限中的 Setuid（s）: 以所有者的权限执行。</li>
+<li>组权限中的 Setgid（s）: 以组的权限执行。</li>
+<li>其他权限中的粘滞位（s）（目录）: 限制删除到文件所有者。</li>
+</ul>
+<p>The permission string -r-sr-sr-x for the file /usr/bin/passwd indicates that the setuid (set user ID) bit is set for the owner (root) and the setgid (set group ID) bit is set for the group (bin).
+because the user=root, group=bin
+so the file will be run as root and bin</p>
+<h3 id="q9">Q9</h3>
+<pre class="hljs"><code><div>Alice has the following Makefile. Since the last build, they have made some updates to
+main.c. Which rules will be run when next typing make?
+main: main.c interface.o analysis.o
+docs.html: main.c interface.c analysis.c library.c
+documentation-generator main.c interface.c analysis.c library.c -o $@
+interface.o: interface.c config.c
+analysis.o: analysis.c library.o
+library.o: library.c
+A. main
+B. main interface.o analysis.o
+C. main docs.html
+D. main interface.o analysis.o docs.html
+</div></code></pre>
+<p>because on the main.c has been changed, so the things within main.c is run too.
+Makefile in C</p>
+<h3 id="q10">Q10</h3>
+<pre class="hljs"><code><div>Alice has created a new program in Java using the Maven buildsystem.
+$ mvn test
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------&lt; com.mycompany.app:my-app &gt;----------------------
+[INFO] Building my-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ my-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /tmp/test/my-app/my-app/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.0:compile (default-compile) @ my-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @
+my-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /tmp/test/my-app/my-app/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.0:testCompile (default-testCompile) @ my-app ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /tmp/test/my-app/my-app/target/test-classes
+[INFO] -------------------------------------------------------------
+Page 7 of 29
+Turn Over/Qu. continues ...(cont.)
+[ERROR] COMPILATION ERROR :
+[INFO] -------------------------------------------------------------
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[3,24]
+package org.junit does not exist
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[3,1]
+static import only from classes and interfaces
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[5,17]
+package org.junit does not exist
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[15,6]
+cannot find symbol
+symbol: class Test
+location: class com.mycompany.app.AppTest
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[18,9]
+cannot find symbol
+symbol: method assertTrue(boolean)
+location: class com.mycompany.app.AppTest
+[INFO] 5 errors
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.917 s
+[INFO] Finished at: 2023-02-14T15:42:26Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal
+org.apache.maven.plugins:maven-compiler-plugin:3.8.0:testCompile
+(default-testCompile) on project my-app: Compilation failure: Compilation
+failure:
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[3,24]
+package org.junit does not exist
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[3,1]
+static import only from classes and interfaces
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[5,17]
+package org.junit does not exist
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[15,6]
+cannot find symbol
+[ERROR] symbol: class Test
+[ERROR] location: class com.mycompany.app.AppTest
+[ERROR] /tmp/test/my-app/my-app/src/test/java/com/mycompany/app/AppTest.java:[18,9]
+cannot find symbol
+[ERROR] symbol: method assertTrue(boolean)
+[ERROR] location: class com.mycompany.app.AppTest
+[ERROR] -&gt; [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read
+the following articles:
+[ERROR] [Help 1]
+What has gone wrong?
+A. The Java compiler version is incorrect
+B. The pom.xml is syntactically incorrect
+C. The syntax of the mvn comand is wrong
+D. A dependency is missing
+</div></code></pre>
+<p>A. it did not said error about the version
+B. the errors are pointing to</p>
+<pre class="hljs"><code><div>because the error messages specifically point to missing packages (org.junit) and symbols related to JUnit.
+</div></code></pre>
+<p>C. The error messages are related to compilation issues and missing dependencies, not an incorrect Maven command</p>
+<pre class="hljs"><code><div>Failed to execute goal
+org.apache.maven.plugins:maven-compiler-plugin:3.8.0:testCompile
+(default-testCompile) on project my-app: Compilation failure: Compilation
+</div></code></pre>
+<p>So it is D.the absence of the JUnit dependency(In the context of Maven and Java projects, a dependency is an external library or module that your project relies on. )</p>
+<h3 id="q11">Q11</h3>
+<pre class="hljs"><code><div>Bob wants to store a table containing students answers in an SQL database. The table
+should have 3 attributes:
+• student (an 8 digit number which references the id attribute of the student table)
+• question (a 2 digit number which references the id attribute of the question table)
+• answer (text containing their answer)
+What SQL command would create the most appropriate table?
+A. CREATE TABLE answers(student VARCHAR(8), question INTEGER, answer
+TEXT, FOREIGN KEY student REFERENCES student(id), FOREIGN KEY question
+REFERENCES question(id), PRIMARY KEY (answer));
+B. CREATE TABLE answers(student VARCHAR(8), question INTEGER, answer
+TEXT UNIQUE, FOREIGN KEY student REFERENCES student(id), FOREIGN KEY
+question REFERENCES question(id), PRIMARY KEY (student, question));
+C. INSERT INTO answers(student, question, answer) VALUES (&quot;0607970&quot;,
+10, &quot;C&quot;);
+D. CREATE TABLE answers(student VARCHAR(8), question INTEGER, answer
+TEXT, FOREIGN KEY student REFERENCES student(id), FOREIGN KEY question
+REFERENCES question(id), PRIMARY KEY (student, question));
+</div></code></pre>
+<p><code>primary key</code>:A primary key is a column or a set of columns in a table that uniquely identifies each row or record in that table.
+<code>foregin key</code> :A foreign key is a column or a set of columns in a table that refers to the primary key of another table. It establishes a link between the two tables.
+C is definitely wrong,so select among ABD
+BD's primary key is (student, question)
+because the pair of one student and one question is unique, kinds of like map?
+answer TEXT UNIQUE: wrong ,answer is randomly among ABCD?</p>
+<pre class="hljs"><code><div>GROUP BY
+
+AVG()
+COUNT()
+SUM()
+
+HAVING 
+</div></code></pre>
+<h3 id="q13">Q13</h3>
+<pre class="hljs"><code><div>The FOREIGN KEY constraint implies which other constraints (if any)?
+A. NOT NULL, UNIQUE
+B. NOT NULL
+C. UNIQUE
+D. No other constraints
+</div></code></pre>
+<p>D.
+BTW, the PRIMARY KEY should be NOT NULL,UNIQUE</p>
+<h3 id="q14">Q14</h3>
+<pre class="hljs"><code><div>      Bob is trying to run a command but it isn’t working. To debug their issue they run their
+      command with strace. What command are they trying to run?
+
+execve(&quot;/usr/bin/cd&quot;, [&quot;cd&quot;, &quot;/home/jhl8636&quot;], 0x7fff0476de18 /* 28 vars */) = 0s
+
+open(&quot;/usr/share/locale/en.utf8/LC_MESSAGES/bash.mo&quot;, O_RDONLY) = -1 ENOENT (No such
+file or directory)
+open(&quot;/usr/share/locale/en/LC_MESSAGES/bash.mo&quot;, O_RDONLY) = -1 ENOENT (No such file
+or directory)
+write(2, &quot;/usr/bin/cd: line 2: cd: /home/j&quot;..., 66/usr/bin/cd: line 2: cd:
+/home/jhl8636: No such file or directory
+) = 66
+read(255, &quot;&quot;, 26)
+= 0
+exit_group(1)
+= ?
++++ exited with 1 +++
+
+
+    A. bash
+    B. cd
+    C. execve
+    D. /etc/ld.so.preload
+    [1 mark]
+    Q15. Bob is trying to run a command but it still isn’t working. Using the trace from before:
+    what type of program does strace try and run, in the first instance?
+    A. A compiled binary command
+    B. A shell script
+    C. A shell builtin command
+    D. Impossible to say
+    [1 mark]
+    Q16. Bob is trying to run a command but it still isn’t working. Using the trace from before:
+    what’s the problem?
+    A. The command they’ve tried to run doesn’t exist
+    B. The permissions are set to prevent their command running
+    C. The filesystem and it’s inodes are corrupt.
+    D. A folder they’ve tried to access doesn’t exist
+</div></code></pre>
+<ol start="14">
+<li>execve:checks for the command: so it is CD</li>
+<li>using man strace because there is too many results that one command can't be done
+So it is shell script</li>
+<li>&quot;No such file or directory&quot;</li>
+</ol>
+<h3 id="q18">Q18</h3>
+<pre class="hljs"><code><div>Alice is trying to set up key-based login on a service she currently accesses via using ssh
+and entering her password. Here are listings of her .ssh directory on her local machine:
+
+        There’s a problem evident with her current setup. Identify which file’s presence, absence or
+        visible details indicates the problem.
+        A. The problem lies with ‘authorized_keys’ on the local machine.
+        B. The problem lies with ‘known_hosts’ on the server.
+        C. The problem lies with ‘id_rsa’ on the local machine.
+        D. The problem lies with ‘id_rsa.pub’ on the server.
+</div></code></pre>
+<p>C Because there should be a private key on the local machine</p>
+<h3 id="q19">Q19</h3>
+<pre class="hljs"><code><div>Which of the below would redirect both standard output and standard error from myprogram
+to log.txt?
+A. ./myprogram &gt; log.txt 1&gt; log.txt
+B. ./myprogram 1&gt; log.txt 2&gt;&amp;1
+C. ./myprogram 2&gt;&amp;1 &gt; log.txt
+D. ./myprogram 2&amp;1&gt; log.txt
+</div></code></pre>
+<p>1&gt; redirects standard output to the specified file (log.txt).
+2&gt;&amp;1 redirects standard error to the same location as standard output, which is log.txt.</p>
+<p>So, option B ensures that both standard output and standard error are redirected to the file log.txt</p>
+<p>D. &amp; here doesn't means <code>AND</code>, so the correct version should be <code>/myprogram 2&gt;&amp;1 &gt; log.txt</code></p>
+<h3 id="q20">Q20</h3>
+<pre class="hljs"><code><div>If command2 ignores standard input and will only work with a file passed as an argument,
+how can we redirect the output of command1 to be used by command2?
+A. command1 &gt; command2
+B. command2 $(command1)
+C. command1 | command2
+D. command2 &lt;(command1)
+</div></code></pre>
+<p>D.&lt;() is called process substitution in Bash.
+It allows the output of command1 to be treated as if it were a file, and this &quot;file&quot; is then passed as an argument to command2</p>
+<p>A. command1 &gt; command2
+the output of command1 will be put into a FILE named command2
+B. use the output of command1 to be the argument of command2
+C. command2 's standards output is not ignored.</p>
+<h3 id="q21">Q21</h3>
+<p>because the whole file is empty, so there is no file called '*' and 'cp'...</p>
+<h2 id="undergrads-paper-2">Undergrads paper 2</h2>
+<h2 id="past-paper">past paper</h2>
+
+</body>
+</html>
