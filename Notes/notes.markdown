@@ -841,10 +841,41 @@ A.
 ![](2024-02-29-144518.png)
 A.ltrace的概念
 # Week 5: SQL
+## Slides
+![](2024-03-05-223819.png)
+**什么时候选择什么数据库呢**
+1. 给钱就用数据库，没给就用表格
+2. 是否需要远程储存数据？
+server-style database(MySQL/MariaDB)
+没有的话就是SQLite
+3. 数据很小
+用数据库或者plain text data storage(CSV)
+4. 数据特别大！
+可以用非SQL的database（Redit）那种吗
+5. 是否有recursive类型的数据
+Prolog，或者Datalog这类
+
+**Primary Key & Foreign Key**
+**主键：**
+* 主键的值必须是唯一的，且不能为空（即不允许NULL值）。
+* 在数据库中，每个表只能有一个主键，它用来确保表中的每一行都能被唯一标识。
+* 主键通常用于建立表与表之间的关系，作为其他表的外键参考。
+
+**外键：**
+* 外键创建了两个表之间的引用关系，通过外键，可以在一个表中引用另一个表中的数据。
+
+Primary Key有两个属性：唯一&非空
+**SQL basics**
+
+
 ## Basic
 **SELECT**
 选择多少列
 ```AS```
+```SQL
+SELECT * FROM album
+LIMIT 5;
+```
 **FROM**
 从哪个
 **WHERE**
@@ -861,7 +892,19 @@ WHERE quantity IN (49,38,72)
 ```
 ```LIKE``` %：无论有多少个
 ```REGEXP```使用正则表达式
+```SQL
+SELECT artist.name AS artist
+FROM album
+JOIN artist
+ON album.aritistid=artist.artistid
+WHERE album.title LIKE '%Rock%'
+LIMIT 5;
+```
+就是title带rock的，然后限制5个
+
 **ORDER BY**
+```ORDER BY albums DESC```降序
+```ORDER BY albums```升序
 **LIMIT**
 ```SQL
 USE sql_store;
@@ -871,6 +914,23 @@ FROM customers
 WHERE customer_id=1
 ORDER BY first_name
 ```
+**GROUP BY**
+```SQL
+SELECT artist.name AS artist,
+COUNT(album.title) as albums
+FROM album
+JOIN artist
+ON album.artistid=artist.artistid
+WHERE album.title LIKE '%Rock%'
+GROUP BY artist
+LIMIT 5;
+```
+这里的count，然后GROUP BY和 HAVING
+
+**NULL**
+```SELECT * FROM fruit WHERE fruit IS NULL;```
+```SELECT * FROM fruit WHERE fruit IS NOT NULL;```
+
 ## Join
 ```SQL
 SELECT column1, column2, ...
@@ -881,7 +941,21 @@ INNER JOIN：如果表中有至少一个匹配，则返回行
 LEFT JOIN：即使右表中没有匹配，也从左表返回所有的行
 RIGHT JOIN：即使左表中没有匹配，也从右表返回所有的行
 FULL JOIN：只要其中一个表中存在匹配，则返回行
-
+```SQL
+SELECT *
+FROM fruit
+FULL OUTER NATURAL JOIN recipes;
+```
+![](2024-03-06-110006.png)
+即使是NULL也给你全返回咯
+**Statistic**
+```COUNT()```
+```AVG()```
+```SUM()```
+```SQRT()```
+![](2024-03-06-112740.png)
+![](2024-03-06-115049.png)s
+哦！对应这道题！1.0*用了浮点数所以是对的
 
 **内连接**
 1. 跨数据库连接：
@@ -1045,7 +1119,26 @@ CREATE TABLE IF NOT EXISTS unit(
 ![](2024-02-21-19-43-25.png)
 ![](2024-02-21-19-43-34.png)
 但是打下来会报错是因为number作为主键没有设置大小）
-
+![](2024-03-05-232957.png)
+**删除表格**
+![](2024-03-05-230219.png)
+**数据类型**
+![](2024-03-05-230422.png)
+但是实际上SQLite会直接
+![](2024-03-05-230447.png)
+**Table constraints**
+![](2024-03-05-230538.png)
+CHECK：在创建表格的时候就对数据有一个约束
+```SQL
+CREATE TABLE employee (
+    id INTEGER PRIMARY KEY,
+    age INTEGER CHECK (age >= 18),
+    salary REAL CHECK (salary >= 0),
+    name TEXT
+);
+```
+**add constraints later**
+![](2024-03-05-232902.png)
 ```USE <database>;```切换到该数据库
 ```SHOW TABLE;```显示表格
 ```DESCRIBE <TABLE>;```查看具体类型
@@ -1080,8 +1173,38 @@ CREATE TABLE enrollments (
     FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
-
 ```
+## Normal Forms
+1. 第一范式（1NF）：
+* 表中的每一列都包含不可再分的原子数据（即每个单元格中的数据不可再分）。
+* 确保每个单元格中的数据是原子的，没有包含集合、数组或其他非原子的数据类型。
+  ![](2024-03-06-113357.png) 因为所选课程是文本，而不是集合、数组
+  ![](2024-03-06-113441.png)
+2. 第二范式（2NF）：
+* 必须符合第一范式。
+* 所有非主键列完全依赖于整个主键，而不是仅依赖于主键的一部分。
+* 确保表中的每一列都直接与主键相关，而不是间接与主键相关。
+  ![](2024-03-06-113523.png)
+  ![](2024-03-06-113800.png)这个就是符合的
+3. 第三范式（3NF）：
+* 必须符合第二范式。
+* 非主键列之间不存在传递依赖关系。换句话说，如果 A → B 且 B → C，则不能存在 A → C。
+* 确保表中的非主键列之间没有冗余的传递依赖关系。
+* ![](2024-03-06-113857.png)
+4. 巴斯-科德范式（Boyce-Codd Normal Form，BCNF）：
+* 是第三范式的一种强化形式。
+* 要求表中的每一个非主键列完全依赖于主键，而不是依赖于主键的某一部分。
+* 主要用于解决多候选键引起的问题，确保每一个非主键列都完全依赖于候选键。
+5. 第3.5范式：
+不是一个正式的范式，通常用于描述在某些情况下对表结构进行进一步优化的技术。
+可以包括分解关系、使用视图等方法，以最大程度地减少冗余和提高查询性能。
+![](2024-03-06-114058.png)
+第一范式->第二范式：消除部分依赖（比如AB->C,AB推导出C，到2NF就是A也能直接推导出C）
+第二范式->第三范式：消除传递依赖（传递依赖就是A->B
+
+
+
+
 ## Exercise
 ### election
 
@@ -1510,6 +1633,69 @@ C. command2 's standards output is not ignored.
 because the whole file is empty, so there is no file called '*' and 'cp'...
 
 ## Undergrads paper 2
+### Q1
+```
+Alice wishes to rebase the bugfix bugfix branch so that instead of being based on the
+release-1.0 branch, it is based on the release-1.1 branch. Which commands should
+they run?
+A. git checkout bugfix; git rebase release-1.1
+B. git checkout bugfix; git merge release-1.1
+C. git checkout release-1.1; git rebase bugfix
+D. git checkout checkout release-1.1; git pull bug-fix
+```
+这个考了rebase，就是和merge不一样
+merge是如果要把A merge到main上，应该先跳转到main分支，然后merge A
+rebase是要看base是什么，如果based是release-1.1，那么就需要先去bugfix再rebase，这样bugfix是再release-1.1的顶部了
+### Q12
+```SQL
+Bob wants to find what their mean soup ranking is.
+Which SQL query will not tell them what they want?
+A. SELECT SUM(ranking)/COUNT(ranking) FROM soupranking;
+B. SELECT AVG(ranking) FROM soupranking;
+C. SELECT (1.0*SUM(ranking))/COUNT(ranking) FROM soupranking;
+D. SELECT SUM(ranking)/(1.0*COUNT(ranking)) FROM soupranking;
+```
+这个在PPT上提到过，实际上就是浮点数的处理问题
+A.
+### Q14
+```SQL
+Alice says Bob’s code is dangerous. Bob says it isn’t. The code doesn’t seem to crash and
+compiles. Who is right and why?
+final String query = "SELECT password FROM users WHERE user LIKE "+username;
+A. Alice is probably right: it looks like it may be vulnerable to SQL injection.
+B. Bob is probably right: it doesn’t crash
+C. Alice is probably right: there is a buffer overflow
+D. Bob is probably right: they have used prepared statements
+```
+A.很容易被注入，为了防止注入，应用程序应该使用参数化查询或预处理语句
+![](2024-03-06-162150.png)
+### Q18
+![](2024-03-06-162853.png)
+这个还是考的本地和server SSH的问题
+缺少authorized_keys
+### Q19
+```SQL
+Q19. Which of the below would redirect both standard output and standard error from the command noisy to /dev/null?
+A. noisy > /dev/null 1> /dev/null
+B. noisy 2&1> /dev/null
+C. noisy 1> /dev/null 2> /dev/null
+D. noisy 2>&1 > /dev/null
+```
+需要redirect，B的语法错误，A是指数除了standard output
+D也是错的，应该是先1，再有2>&1
+所以最后选C
+```SQL
+If command2 needs to be given a string argument that comes from the output of command1,
+how can we capture the output of command1 to be used by command2?
+A. command1 > command2
+B. command2 $(command1)
+C. command1 | command2
+D. command2 <(command1)
+```
+string output->as arguments,所以是B
+A是将command1的结果输出到一个名为command2的filezhong
+C.是将command1的输出作为command2的管道输入，而不是argument？
+D.是重定向
 
 
 
