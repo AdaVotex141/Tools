@@ -471,9 +471,483 @@ autocomplete="name">
 </body>
 </html>
 ```
-### 选择器Selector
+#### 选择器Selector
 除了常用的那个
+**元素选择器**
+![](2024-04-09-143007.png)
+对应就是
+```css
+h4{
+  color:blue;
+}
+.classSelector{
+  color:green;
+}
+#idSelector{
+  color:blue;
+}
+```
+但是常用的还是类选择器，ID选择器一般只能用于一个元素，并且ID选择器的优先级是最高的
+**类的层级关系**
+```html
+<div class="child">外部关系</div>
+<div class="parent">
+  <div class="child">内部关系</div>
+</div>
+```
+```css
+.child{
+  color:red;
+}
+.parent{
+  .child{
+    color:blue;
+  }
+}
+```
+最后外部关系应该是：红色
+内部关系应该是：蓝色
+parent-child虽然同名，但是有层级关系的可以直接指定（
+**分配不同的样式**
+大概这样就可以分配很多类了）
+```HTML
+<p class="text-color font-size">选择器来</p>
+```
+
+| CSS | HTML |
+|--------|------|
+| p | ```<p>``` |
+| .important | ```<div class="important">``` |
+| #title | ```<div id="title">``` |
+| p.important | ```<p class="important">``` |
+| h1#title | ```<h1 id="title">``` |
+
+**选择范围**
+```.container p```选择所有 container **内部的p元素**
+```.container > p```选择所有p元素的直接子后代？
+```HTML
+<div class="container">
+    <p>This is a direct child paragraph.</p>
+    <div>
+        <p>This is a nested paragraph.</p>
+    </div>
+</div>
+```
+* 比如这里，```.container p```两个p元素都会选，而```.container > p```只有direct child
+
+
+```.container ~ p```紧跟在 .container 元素**之后**的所有 ```<p>``` 元素
+```.container + p```紧跟在 .container 元素**之后**的第一个 ```<p>``` 元素
+```HTML
+<div class="container"></div>
+<p>Paragraph 1</p>
+<p>Paragraph 2</p>
+```
+* ```.container ~ p```选择两个，```.container + p```只会选择第一个
+
+```HTML
+<div class="container"></div>
+<section>
+    <p>Paragraph 1</p>
+    <p>Paragraph 2</p>
+</section>
+```
+* ```.container ~ p```会选择两个，而 ```.container p```一个都不会选，因为不在内部
+
+#### Colour
+要不就上面说的color name（red，green etc.)
+* HEX
+  ```CSS
+  .hex{
+    /*rrggbb*/
+    /*#FF0000 表示红色，#00FF00 表示绿色，#0000FF 表示蓝色*/
+    color:#eb45e0;
+  }
+  ```
+* RGB
+  ```CSS
+  .rgb{
+    /*RED GREEN BLUE:0-255*/
+    color:rgb(0,255,255);
+  }
+  ```
+任意赋值，比如
+```CSS
+.background-color{
+  background-color:rgb(0,0,0);
+}
+.border-color{
+  border:3px solid #FF00FF;
+}
+```
+还可以调整透明度比如：
+```CSS
+.background-transparent{
+  color:rgba(255,255,255,0.5);
+}
+/*或者这样也是透明度*/
+.opacity{
+  opacity:0.5
+}
+```
+
+#### text
+
+```HTML
+.selector {
+    font-family: family-name | generic-family;
+}
+```
+family-name：指定一个具体的字体族名称，可以是字体的名称、字体系列的名称，或者是一个通用字体族名称。
+generic-family：指定一个通用的字体族名称作为后备选择，如果用户系统上没有指定的字体族，则会使用通用字体族。
+![](2024-04-09-151741.png)
+
+
+#### 盒子模型（box model）
+![](2024-04-09-153447.png)
+```CSS
+.box-model{
+  margin-top: 10px;
+  padding-left: 20px;
+
+  margin: 10px 5px 15px 20px;
+  /*top right bottom left*/
+  margin: 25px 50px 75px;
+  /*
+  top margin is 25px
+  right and left margins are 50px
+  bottom margin is 75px
+  */
+  margin: 25px 50px;
+  /*
+  top and bottom margins are 25px
+  right and left margins are 50px
+  */
+
+  
+  border: 1px solid black;
+}
+
+div {
+  width: 300px;
+  height:120px;
+  /*本体可以直接设置宽度和高度*/
+
+  margin: auto;
+  /*auto set the margin: 将使浏览器自动计算并分配元素的左右外边距，以使其在父容器中水平居中。这意味着元素的左右外边距将自动设置为相等的值，从而使元素水平居中*/
+  border: 1px solid red;
+
+}
+```
+
+### Unites of Measurement
+
+**dpi(ppi)**：dots per inch
+PC->72
+
+**Units**：
+  * px->pixel
+  * pt->point
+  * cm,in
+  * em->width of letter m
+  * ex->height of letter x
+  * lh->line height(+space)
+  * vm,vh 1% of viewport width/height
+  * rem root em(html)
+  * % parent width/height
+
+### Exercise
+
+1. 要在HTML里面的<HEAD>里加一个```<link rel="stylesheet" href="sometext.css">```
+```CSS
+body {
+    margin: 0 auto;
+    max-width: 40em;
+    line-height: 150%;
+    font-size: 20px;
+}
+```
+  * 提到了现在一般不用double-spacing(line-height: 200%)
+2. Starting from Scratch
+  重头写一遍所有的Styling
+  * h1 h2的font-size可以写成```font-size:150%;```,也可以写成```1.5em```这种  
+3. Frameworks:
+a. **Milligram**
+
+*Milligram chooses to style the whole page by default, but you can customise this further*
+  * ![](2024-04-11-132304.png)下载下来是这样的
+  * 然后加了
+```HTML
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+```
+![](2024-04-11-132410.png)
+突然变好看了（
+第一个链接是字体，第二个链接指向的```normalize.css```
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+第三个才是加载*Milligram*
+milligram能自主设置，比如main中加一个container
+![](2024-04-11-133459.png)
+* 加一个移动端：![](2024-04-11-133801.png)
+![](2024-04-11-133817.png)
+这是因为有一个这个```<meta name="viewport" content="width=device-width, initial-scale=1">```
+
+其余的就是：Milligram是怎么设置以下内容的？
+* Size of heading fonts
+```CSS
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 300;
+  letter-spacing: -.1rem;
+  margin-bottom: 2.0rem;
+  margin-top: 0;
+}
+h1 {
+  font-size: 4.6rem;
+  line-height: 1.2;
+}
+h2 {
+  font-size: 3.6rem;
+  line-height: 1.25;
+}
+```
+* Form fields take up the full width of the container
+```CSS
+dl,
+ol,
+ul {
+  list-style: none;
+  margin-top: 0;
+  padding-left: 0;
+}
+```
+* Form labels and fields appear below each other
+```CSS
+label,
+legend {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+}
+```
+label一般用的block
+* Labels are closer to their own field than the field above
+```Milligram may use CSS margins or padding to control the spacing between form labels and fields.```
+* Size and centering of everything in a container on wide enough screens
+```CSS
+@media (min-width: 40rem) {
+  .row {
+    flex-direction: row;
+    margin-left: -1.0rem;
+    width: calc(100% + 2.0rem);
+  }
+  .row .column {
+    margin-bottom: inherit;
+    padding: 0 1.0rem;
+  }
+}
+```
+所以是用的media queries
+b. **Bulma**
+*it only styles parts of the page you tell it to (but it sets a default font), and it has some more components to build things like menus or panels.*
+加了```<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.css">```之后就是这样的：
+![](2024-04-11-135347.png)
+* 提到了```bulma.css```和```bulma.min.css```其实意思就是，前面的是给人读的，后面的就直接把各种换行给去掉了）
+* 搞点自定义的bulma试试：
+  1. HERO title：
+    Add class hero to the header tag.
+    Add a child div hero-body inside it that wraps the h1 tag.
+    Set the classes title is-1 on the h1 tag itself.
+    ![](2024-04-11-141032.png)
+```HTML
+    <header class="hero">
+    <!-- Child div with class "hero-body" -->
+    <div class="hero-body">
+        <!-- H1 tag with classes "title is-1" -->
+        <h1 class="title is-1">CSS conference booking page</h1>
+    </div>
+</header>
+```
+  2. 内容方面的
+    加一个
+```HTML
+<main class="content">
+```
+![](2024-04-11-141249.png)
+
+
 ## CSS grids
+Display 有很多种，比如block, inline, inline-block, flex 等，课程主要讲的是grids（网格）
+![](2024-04-10-212328.png)
+
+其实就是：
+![](2024-04-10-212353.png)
+block->独占一行
+inline->不会独占一行
+block->inline->能设置宽高
+
+### grid
+需要设置：```display:grid;```
+```HTML
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.item1 { grid-area: header; }
+.item2 { grid-area: menu; }
+.item3 { grid-area: main; }
+.item4 { grid-area: right; }
+.item5 { grid-area: footer; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'header header header header header header'
+    'menu main main main right right'
+    'menu footer footer footer footer footer';
+  gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
+</style>
+</head>
+<body>
+
+<h1>Grid Layout</h1>
+
+<p>The CSS Grid Layout Module offers a grid-based layout system, with rows and columns, making it easier to design web pages without having to use floats and positioning:</p>
+
+<div class="grid-container">
+  <div class="item1">Header</div>
+  <div class="item2">Menu</div>
+  <div class="item3">Main</div>  
+  <div class="item4">Right</div>
+  <div class="item5">Footer</div>
+</div>
+
+</body>
+</html>
+```
+* Grid Layout
+  * 在HTML中应该有
+  ```HTML
+  <div class="container">
+    <p>item1</p>
+    <p>item2</p>
+  </div>
+  ```
+  然后CSS有
+  ```CSS
+  .container{
+    display:grid;
+  }
+  ```
+  * 调整宽高
+  ```CSS
+  .container{
+    display:grid;
+  
+    grid-template-rows: 200px 100px 100px;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  ```
+  ![](2024-04-10-214318.png)
+  grid-template-rows的效果
+  ![](2024-04-10-214348.png)
+  grid-template-columns的效果
+  ![](2024-04-10-214514.png)
+  gap.repeat的效果
+
+  * 获取区域
+  ![](2024-04-10-214709.png)
+  人家是从1开始的
+  ![](2024-04-10-214735.png)
+
+  学了这个就可以类似的:
+```CSS
+  header {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+article {
+  grid-column: 2;
+  grid-row: 2;
+}
+aside {
+  grid-column: 1;
+  grid-row: 2;
+}
+footer {
+  grid-column: 1 / 3;
+  grid-row: 3;
+}
+```
+### Design
+* 有个什么principle 1：test with your intended audience!
+* Gestalt:整体性，然后Whitespace，text width
+* principle 2：on the web, use responsive design（就是屏幕适应）
+  比如说：这个auto就是自适应
+```CSS
+<!--General-->
+Bad:  main { width: 800px; }
+OK:  main { max-width: 800px;
+       margin: 0 auto; }
+```
+还有用media queries：
+```CSS
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+}
+```
+
+### Exercise
+
+display:grid就是默认将child都呈网格状排布了，有```grid-templates-colmuns```和```grid-gap```
+对于每一个child，有：
+* By default, each child takes up the next free 1x1 space.
+* ```grid-row```和```grid-column```：
+  * ```span N```makes a child element N cells wide/tall
+  * ```M / N ```positions the child absolutely from dividing line M to dividing line N (you can overlap or stack elements on top of each other this way if you want to).
+
+大概练习就是：做grid的那道题（
+主要是有一个特殊的要去自定义一下row和column，其他的基本就是跟着描述span就完事了
+```CSS
+.y2-tb4 {
+    grid-row: 3/5; /* SPE unit starts from row 7 */
+    grid-column: 11/13;
+    grid-row-end: span 2; /* SPE unit spans 2 rows */
+}
+```
+自适应主要是用@media:
+```CSS
+@media (min-width: 400px) and (max-width: 600px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr); /* Two equally wide columns */
+    }
+
+    .featured {
+        grid-column-end: span 2; /* Featured trees take up 2x2 space on the grid */
+        grid-row-end: span 2;
+    }
+}
+```
 
 # Week 8: Javascript
 ## JavaScript: Basics
@@ -482,3 +956,25 @@ autocomplete="name">
 ## Asynchronous JavaScript
 
 # Week 9: Web Scraping
+
+# Past Paper
+## Paper 1
+### Q29
+![](2024-04-11-142906.png)
+四个元素是上左下右，顺时针的顺序，这个倒是答对了
+margin的关键词可能是因为是border(
+margin-border-padding-content
+### Q30
+![](2024-04-11-142935.png)
+*the ```<p>``` size is defined relative to the ```<div>``` that contains it, which modifies the root font-size*
+实际上还是考了那个p是在div里面的（？
+所以答案应该是```14*1.2*0.8```
+### Q32
+![](2024-04-11-142953.png)
+首先的首先，*retrieved*是取回的意思，貌似和web scraping相关还没写
+*The index page, the about.html page and the style.css from the header will be
+retrieved.
+The main HTML file (index.html or whatever the default name is)
+The linked stylesheet (style.css)
+The linked about page (about.html)
+**-l 1** means no further recursion will proceed on linked pages, and wget will not follow the link to the external domain. Controlling wget recursion is part of the first set of web scraping exercises*

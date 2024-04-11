@@ -1,0 +1,63 @@
+body {
+    font-family: sans-serif;
+    background-color: rgba(112, 145, 53, 0.1);
+}
+
+.unit {
+    background-color: rgba(0, 67, 79, 0.2);
+}
+
+.unit b {
+    display: block;
+    background-color: rgb(0, 67, 79);
+    color: white;
+    padding: 5px;
+}
+
+.unit p {
+    padding: 5px;
+}
+
+.layout{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 equally wide columns */
+    max-width: 1500px; /* Maximum width of 1500px */
+    margin: 0 auto; /* Center the grid */
+    gap: 15px; /* Gap between grid cells */
+}
+
+.y1-tb1.cp20,
+.y1-tb2.cp20,
+.y2-tb1.cp20,
+.y2-tb2.cp20 {
+    grid-column: span 4; /* 20CP units take up 4 columns */
+}
+
+.y1-tb1.cp10,
+.y1-tb2.cp10,
+.y2-tb1.cp10,
+.y2-tb2.cp10,
+.y3-tb1.cp10 {
+    grid-column: span 2; /* 10CP units take up 2 columns */
+}
+
+.y1-tb1.cp15,
+.y3-tb1.cp15 {
+    grid-column: span 3; /* 15CP units take up 3 columns */
+}
+
+
+.y3-tb2.cp20 {
+    grid-column: span 4; /* Mini-Project takes up 4 columns */
+}
+
+.y3-tb2.cp40 {
+    grid-column: span 8; /* Individual Project takes up 8 columns */
+}
+
+/* Special case for SPE unit */
+.y2-tb4 {
+    grid-row: 3/5; /* SPE unit starts from row 7 */
+    grid-column: 11/13;
+    grid-row-end: span 2; /* SPE unit spans 2 rows */
+}
