@@ -950,10 +950,240 @@ display:grid就是默认将child都呈网格状排布了，有```grid-templates-
 ```
 
 # Week 8: Javascript
+
 ## JavaScript: Basics
+
+可以放到```<body></body>```的一堆元素后面：```    <script></script>```， 但是一般是分离开写的：
+```    <script src="index.js"></script>```
+
+* **变量**：
+var：全局作用，一般不用了
+let：普通
+const：常量，一旦赋值无法改变（除非数组或者对象）声明时就初始化数值
+
+* **原生数据类型**
+String，Number，Boolean，null,underfined
+```const username = "John"```
+```const age = 30;```
+```const isCool =true;```
+```const rate = 4.5;```（统一为number类型）
+```const x = null ;```(但是console打印出来是Object)
+
+* **模版字符串**
+字符串连接：
+本来是```console.log("my name is"+username);```
+但是可以写成这样
+```console.log('my name is ${username}`);```
+* **字符串内置**
+```s.length```
+```s.toUpperCase()```
+```s.substring(0,5)```(分割字符串)
+```s.split(",")```
+* **数组**
+构造函数
+```const numbers = new Array(1,2,3,4,5);```
+```const fruits = ["apples", "banna", 10];```
+可以有各种类型的
+```fruits.push("mango");```数组末尾添加元素
+```fruits.unshift("C");```数组头部添加元素
+```fruits.pop()```删除末尾的元素
+```Array.isArray("hello"))```检测是否是数组
+```fuits.indexOf("oranges");```给index
+
+* **Execution Context(执行上下文)**
+
+```
+var a =2;
+function add (num){
+  var resultlocal=num+10;
+}
+var resultglobal=add (a);
+```
+![](2024-04-17-153726.png)
+这个讲的就是作用域的东西
+  * 浏览器看js code->create a box to run code(Execution context)->Global&Local execution context
+  * 每当执行一段代码时，都会创建一个新的执行上下文。常见的执行上下文包括全局执行上下文（global execution context）和函数执行上下文（function execution context）
+  * 全局执行上下文是在执行 JavaScript 代码时创建的默认上下文，它代表了整个 JavaScript 程序的运行环境。而函数执行上下文则是在调用函数时创建的，每次函数调用都会产生一个新的函数执行上下文
+
+* **Hoisting（提升）**
+
+Hoisting（变量提升）是 JavaScript 中的一种行为，指的是在代码执行阶段，JavaScript 引擎会将**变量和函数的声明**提升到它们所在作用域的顶部，但是只提升声明，不提升赋值
+比如说
+```JavaScript
+console.log(x); // undefined
+var x = 5;
+```
+![](2024-04-17-155742.png)
+左边是undefined->所以的意思是提升声明，而不是赋值
+但是能不报错因为有hoisting这个行为
+如果是两次赋值的话，只hoist第一次的
+  * var就是declaration hoisting
+  * functions就是value hoisting
+
+
+* **Scope**
+这个就是作用域
+![](2024-04-17-155954.png)
+
+* **Call Stack**
+![](2024-04-17-162049.png)
+函数调用的时候，执行就往里面堆栈，完成之后就pop
+![](2024-04-17-162120.png)
+* **Syntax**
+![](2024-04-17-162159.png)
+![](2024-04-17-162219.png)
+```===```严格相等运算符（Strict Equality Operator），用于比较两个值是否具有相同的值和相同的数据类型
+* **Arrays,For loop**
+![](2024-04-17-160709.png)他这里给了例子但是String实际上并不是Array，只是可以用这个形式访问
+![](2024-04-17-160746.png)
+for有两种，```in```是返回的index？```of```返回的是value？
+
+* **Anonymous Functions**
+functions不一定要名字
+```map()```可以让某个函数apply（应用吧？）到array里面的每一个value
+所以例子可以是：
+```JavaScript
+var age = [20,25,30,35];
+ages = ages.map(function(age) {
+  return age + 10;
+});
+```
+或者有
+```JavaScript
+var add = function(x, y) {
+    return x + y;
+};
+```
+
+* **Arrow Functions**
+
+![](2024-04-17-161625.png)
+```var add = (x, y) => x + y;```
+
+* **Events in JavaScript**
+![](2024-04-17-161637.png)
+
 ## JS Objects (incl. JSON)
-## Object Oriented Programming 
-## Asynchronous JavaScript
+
+* 对象：属性加方法
+```JavaScript
+const person = {
+  firstName: "John",
+  lastName: "Done",
+  hobbies:["music","sports"],
+  address:{
+    street:"50",
+    city:"boman"
+  },
+};
+```
+里面内容都用```,```隔开的
+还可以这样，比如说
+```JavaScript
+const { firstName, lastName }= person;
+console.log(firstName);
+```
+打印出来是John
+* 对象数组：
+```JavaScript
+const people = [
+  { name: 'Alice', age: 30 },
+  { name: 'Bob', age: 25 },
+  { name: 'Charlie', age: 35 }
+];
+```
+* JSON
+JSON: 轻量级的数据交换格式,基于JavaScript对象的语法，但是独立于编程语言,JSON由键值对构成，键值对之间使用逗号分隔，键与值之间使用冒号分隔，整个数据结构被包含在大括号 {} 中
+JSON 中的字符串需要使用双引号括起来,数字不用，JSON 不支持包含函数，而 JavaScript 对象可以包含函数
+转换到JSON：
+```JavaScript
+const peopleJSON=JSON.stringify(people);
+```
+JSON转换到JavaScript:
+```JavaScript
+const peopleJSON=JSON.parse(people);
+```
+
+* JSON vs. XML
+JSON更好parse
+JSON可以用arrays
+
+## Object Oriented Programming
+
+![](2024-04-17-165856.png)
+![](2024-04-17-165910.png)
+在，JavaScript里面，Objects轻量：
+![](2024-04-17-165949.png)
+![](2024-04-17-170004.png)
+![](2024-04-17-170013.png)
+![](2024-04-17-170024.png)
+
+## Asynchronous JavaScript（异步）
+
+JavaScript是同步执行的，但是有时候要异步功能：callback&promises
+* **callback**:
+A callback is a function passed as an argument to another function
+比如原来有：
+```JavaScript
+function myDisplayer(some) {
+  document.getElementById("demo").innerHTML = some;
+}
+function myCalculator(num1, num2) {
+  let sum = num1 + num2;
+  return sum;
+}
+let result = myCalculator(5, 5);
+myDisplayer(result);
+```
+但是要调用两次
+```JavaScript
+function myDisplayer(some) {
+  document.getElementById("demo").innerHTML = some;
+}
+
+function myCalculator(num1, num2, myCallback) {
+  let sum = num1 + num2;
+  myCallback(sum);
+}
+
+myCalculator(5, 5, myDisplayer);
+```
+In the example above, myDisplayer is a called a **callback function**.
+It is passed to myCalculator() **as an argument**.
+![](2024-04-17-173916.png)
+但是可能出现call back hell:
+"callback hell"（回调地狱）是指在异步编程中出现的一种情况，其中多个回调函数嵌套在一起，形成了深层次的回调嵌套结构，使得代码难以理解、难以维护、难以扩展的情况。
+由此引入promise
+* **promise**:
+Promise 对象有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败），可以通过 then() 方法处理成功状态和 catch() 方法处理失败状态
+```JavaScript
+// 定义一个返回 Promise 对象的函数
+function wait(ms) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+// 调用 wait 函数，等待 2 秒钟后输出消息
+wait(2000)
+    .then(() => {
+        console.log('Two seconds have passed.');
+    })
+    .catch((error) => {
+        console.error('An error occurred:', error);
+    });
+
+```
+在这个例子中，wait() 函数返回一个 Promise 对象，它等待指定的时间（以毫秒为单位）后调用 resolve() 方法。然后我们使用 then() 方法来处理成功状态，即等待 2 秒钟后输出消息。如果发生错误，我们可以使用 catch() 方法来处理失败状态
+
+* **forEach**:
+forEach 是 JavaScript 中数组的一个方法，用于遍历数组的每个元素并对其执行指定的操作
+![](2024-04-17-173317.png)
+## Exercise
+
+是API to fetch DATA+add it to DOM of HTML
+
+
 
 # Week 9: Web Scraping
 
