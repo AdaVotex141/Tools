@@ -1287,3 +1287,24 @@ The main HTML file (index.html or whatever the default name is)
 The linked stylesheet (style.css)
 The linked about page (about.html)
 **-l 1** means no further recursion will proceed on linked pages, and wget will not follow the link to the external domain. Controlling wget recursion is part of the first set of web scraping exercises*
+
+### Q33
+![](2024-04-18-122821.png)
+
+### Q34
+![](2024-04-18-122835.png)
+PPT上说的是script language，问了chatgpt是都对= =
+然后stack overflow是 interpreted ->Parsing -> Compiling -> Executing
+所以是JavaScript code is initially interpreted before any execution begins，interpreted
+
+### Q37
+![](2024-04-18-123140.png)
+1. 在JavaScript中，函数的参数是可选的。即使在函数定义时声明了参数，但在调用函数时没有提供参数，函数仍然可以正常执行
+2. 跟作用域有关，所以是reference error
+
+### Q38
+![](2024-04-18-123502.png)
+昨天看的以为是```===```是函数类型和值完全一样就可以了，但实际上还可以是指引用是否完全一致
+并且对于对象而言，```===```和```==```都可以指对象的引用
+
+## Paper 2
