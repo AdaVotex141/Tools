@@ -1181,7 +1181,86 @@ forEach 是 JavaScript 中数组的一个方法，用于遍历数组的每个元
 ![](2024-04-17-173317.png)
 ## Exercise
 
-是API to fetch DATA+add it to DOM of HTML
+这个作业的目的是API to fetch DATA+add it to DOM of HTML
+
+1. API：
+  * 接口？用于access and manipulate information，比如you send GET, PUSH and POST requests as normal and get data sent back in a suitable format (usually JSON or XML).
+  *  standardized，security（就是标准化，适用于各种应用，然后只有授权的才给access）
+  *  TMDB：
+  key：```d7f89781d01251450fa7113ad85c5e1a```
+  Token：
+```
+eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkN2Y4OTc4MWQwMTI1MTQ1MGZhNzExM2FkODVjNWUxYSIsInN1YiI6IjY2MjAyZmY4MDgxNmM3MDE0OWVkZWM5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Te9ypMoB5zmRVvEKuqLhbES1afOKJmpiHBbv6X_w98s
+```
+  * Python：
+  ```
+  PS C:\Users\Ada> python -m http.server
+Serving HTTP on :: port 8000 (http://[::]:8000/) ...
+  ```
+
+2. JavaScript
+   1.设置开头，将HTML和JS连接起来  
+```JavaScript
+const API_URL =d7f89781d01251450fa7113ad85c5e1a
+const IMG_PATH = 'https://image.tmdb.org/t/p/w500'
+const SEARCH_API = 'https://api.themoviedb.org/3/search/movie?api_key=XXX&query="'
+
+const IMG_PATH = 'https://image.tmdb.org/t/p/w1280'
+const SEARCH_API = API_URL+'&query="'
+
+const main =  document.getElementById("main");
+const form = document.getElementById("form");
+const search = document.getElementById("search");
+```
+这里的API_URL就是上面的key
+然后下面的main，form，search用这个方法实现和HTML的互动，是 JavaScript 中的一个内置对象，代表当前 HTML 文档。它提供了访问和操作 HTML 文档内容的方法和属性
+   2. 修改getMovies function
+   这个是用用API来fetch movies的
+```JavaScript
+function getMovies(url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            showMovies(data.results);
+        })
+        .catch(error => {
+            console.error('Error fetching movies:', error);
+        });
+}
+```
+**async/await** :async：用于声明一个函数是异步的。当函数声明为 async 时，它将隐式地返回一个 Promise 对象。在函数内部，可以使用 await 关键字来等待 Promise 对象的解析，并暂停函数的执行，直到 Promise 对象状态变为 resolved（已解决）。
+
+await：只能在 async 函数内部使用。它用于等待一个 Promise 对象的解析结果。当遇到 await 关键字时，函数的执行将暂停，直到 Promise 对象状态变为 resolved（已解决）或 rejected（已拒绝）
+则上面的修改为：
+```JavaScript
+async function getMovies(url) {
+    try {
+        const response = await fetch(url); // Fetch data from the URL
+        if (!response.ok) {
+            throw new Error('Failed to fetch movies');
+        }
+        const data = await response.json(); // Parse response as JSON
+        showMovies(data.results); // Call showMovies function with the results
+    } catch (error) {
+        console.error('Error fetching movies:', error); // Handle any errors
+    }
+}
+```
+
+然后这里加上
+```JavaScript
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+```
+
+然后debug是上面有两个
+
+3. API security
+how? *using Environment Variables in Server-Side Code Only*
+使用环境变量仅在服务器端代码中" 意味着将敏感信息（如 API 密钥、数据库密码等）存储在服务器的环境变量中，而不是硬编码到代码中。这样做的好处是可以保护敏感信息，因为环境变量在大多数情况下不会被公开。当服务器端代码需要使用这些敏感信息时，它可以通过读取环境变量来访问它们，而不是直接在代码中使用它们。
+->save our API key in a .env file and keep it secure and separate for the rest of the code on the server
+我们刚刚是直接使用了API key，但是可以放在另一个.env文件中
+
 
 
 
