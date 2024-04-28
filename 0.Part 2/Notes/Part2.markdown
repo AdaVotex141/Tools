@@ -1266,6 +1266,63 @@ how? *using Environment Variables in Server-Side Code Only*
 
 # Week 9: Web Scraping
 
+## Crawling the Web
+* ```wget <url>```下载什么什么东西
+* ```wget -p <url>```-Download webpage with requisites, 下载网页及其相关的所有必需元素,包括stylesheets，images，包括**ROBOTS.TXT**
+* **ROBOTS.TXT**通常位于网站的顶级目录下，用于指定搜索引擎爬虫访问网站时的行为规则。它是网站管理员用来控制搜索引擎爬虫对网站内容进行抓取和索引的一种方式。告诉搜索引擎爬虫哪些页面可以访问，哪些页面不应该被访问，以及爬虫在抓取网站时应该遵守的其他规则
+* ```wget -r -l N <url>```-Download webpage and linked pages下载网页本身+recursion
+  * **-l N**: The level of recursion to permit. (Default 
+if omitted is 5).
+* ```wget -m <url>```creating a local copy of a full website
+  * ```-w 1```: Wait 1 second between each request (to 
+avoid annoying a server)
+* Ethics
+  * Does the site permit you to crawl this resource? (robots.txt)检查robot.txt查看是否允许爬虫
+  * Is there a better way to get a copy 除了copy还有其他的更好地方式吗
+  * Are you allowed to republish downloaded content? (e.g., copyright) 是否允许
+  * Are you going to make something more public than it should be?
+
+### Exercise
+
+
+
+
+## BeautifulSoup
+BeautifulSoup 是一个功能强大且易于使用的工具，用于解析和操作 HTML 或 XML 文档，常用于网络爬虫、数据抓取和数据分析等任务中
+![alt text](image.png)
+
+一般是用file pointer来读取文件：
+```python
+file = "cattax/index.html"
+soup = BeautifulSoup(open(file, 'r')
+```
+Common desire in scraping: get the visible text on a page:
+```python
+text = soup.get_text()
+print(text)
+```
+Navigating page elements:
+```python
+Select a page element by tag name:
+>>> soup.title
+Navigate the element heirarchy
+>>> soup.body.main
+Parent and child (+ ‘sibling’) relationships.
+```
+Finding page elements：
+```python
+Avoid navigation, have BeautifulSoup find elements by a 
+specification.
+>>> soup.find(‘strong’)
+Find more than the first match:
+>>> soup.find_all(‘strong’)
+Can also refine search by ‘attrs=’ – see documentation!
+```
+
+
+
+
+
 # Past Paper
 ## Paper 1
 ### Q29
