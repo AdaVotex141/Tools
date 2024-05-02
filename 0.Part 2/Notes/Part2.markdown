@@ -1,7 +1,11 @@
 # Week6: The Web
 ## 6.1 HTTP
 ### HTTP
-1. HTTP中的P就是protocal，协议，主要是由client和server之间的互动
+1. HTTP中的P就是protocal，协议，主要是由client和server之间的互动：HyperText Transfer Protocol
+Developed by Tim Berners-Lee at CERN, 1989.
+Published as a set of RFC specifications.
+传输的是什么：hypertext+metadata
+元数据与数据的区别：元数据指的是关于数据的信息，而不是数据本身。在 HTTP 中，头部（request and response headers）和状态码（status codes）提供了关于通信过程和结果的信息，但它们并不是实际传输的数据内容
    ![](2024-03-08-212318.png)
    请求报文就是：Header
    Client Header
@@ -10,11 +14,17 @@
    ![](2024-03-08-212749.png)
    ![](2024-03-08-212704.png)
    * Methods有```GET```(提取信息) ```HEAD``` ```POST```（传输信息） ```PUT``` ```DELETE```
+   * GET : retrieve a copy of the target resource用于从服务器获取资源的副本
+POST : submit payload data to a target resource用于向服务器提交数据，并请求服务器对提交的数据进行处理
+HEAD : retrieve metadata for corresponding GET 类似于 GET 请求，但不会返回请求的资源本身，而只返回响应头部信息。通常用于检查资源的元数据
+PUT : replace target resource with payload用于向服务器上传或替换指定资源
+DELETE: delete the target resource
+In practice, many servers do not implement or will ignore DELETE or PUT requests in favour of custom semantics using POST requests.
    * Response codes:
      ![](2024-03-08-213012.png)
    * Content Type:
      ![](2024-03-08-213034.png)
-2. Cookies
+1. Cookies
    一开始http的设计是无状态的，但是后来有了用户登录，为了保持登陆状态才有了cookies
    ![](2024-03-08-213713.png)
    Cookie protocol
@@ -140,6 +150,9 @@ HTTP使用TCP协议作为其传输层协议，使用TCP保证可靠传输
             PUT： 更新资源或在不存在时创建资源。
             DELETE： 删除资源。
         ![](2024-03-08-232436.png)
+        12 符合REST原则，34不符合
+        3是因为如果是删除的话，应该是DELETE xxx
+        4是因为通常不直接将资源名作为查询参数来传递。相反，资源通常通过 URL 的路径部分来指定
         ![](2024-03-08-232532.png)
 
 ### Exercise
@@ -154,6 +167,9 @@ HTTP使用TCP协议作为其传输层协议，使用TCP保证可靠传输
 ```nc -l -p 8000 < http-response```:network cat and tells it to listen on TCP port 8000 (-l -p 8000), e.g. to run a server there启动一个network cat让其在端口8000 run一个server
 ![](2024-04-04-21-41-21.png)
 ![](2024-04-04-21-41-40.png)
+* -q: 这是 wget 命令的选项之一，它用于关闭 wget 的输出，使其在运行时不显示任何消息或进度信息。-q 是 "quiet" 的缩写。
+* -S: 这也是 wget 命令的选项之一，它用于在输出中显示服务器的响应头信息。-S 是 "server response" 的缩写。
+* -O -: 这也是 wget 命令的选项之一，它用于指定要将下载的内容输出到哪里。在这种情况下，-O - 表示将下载的内容输出到标准输出流（stdout），而不是保存到文件中。
 3. Connect to a web browser
    ![](2024-04-04-21-52-14.png)
 4. A web server in C
@@ -178,9 +194,9 @@ HTTP使用TCP协议作为其传输层协议，使用TCP保证可靠传输
 * Model-View-Controller（MVC）是一个设计模式，constroller是负责用户输入和请求的，大概是一个中间人
 * Spring是用@来作为class分类的：
   * ```@SpringBootApplication```-在main class里面x表明这个是main函数
-  * ```@RestController```告诉Spring 这个主要是和HTTP请求有关的，this class contains methods to deal with HTTP requests. 用REST命名主要because spring has libraries to make implementing the REST principles particularly easy.（REST是那个principle）
-  *  ```@AutoWired```自动装配（注入）依赖关系，将需要的 Bean 注入到目标类中。on a field tells spring that this field is spring's responsibility to set up when the application starts
-  *  ```@GetMapping(PATH)``` this method should be called to reply to a HTTP GET request for the provided path (there is of course also a @PostMapping and so on).
+  * ```@RestController```告诉Spring 这个主要是和HTTP请求有关的，this class contains methods to deal with HTTP requests. 用REST命名主要because spring has libraries to make implementing the REST principles particularly easy.（REST是那个principle）注解告诉 Spring 框架，这个类处理的请求的返回值是直接返回给客户端的，而不是视图（View）。这意味着它的方法将直接返回 JSON、XML 或其他格式的数据给客户端。
+  *  ```@AutoWired```自动装配（注入）依赖关系，将需要的 Bean 注入到目标类中。on a field tells spring that this field is spring's responsibility to set up when the application starts这是一个 Spring 的依赖注入注解，它告诉 Spring 容器，在运行时，自动将依赖项注入到目标类中。通常，@Autowired 注解可以用在字段、构造函数、Setter 方法上，用来标记需要被自动注入的依赖
+  *  ```@GetMapping(PATH)``` this method should be called to reply to a HTTP GET request for the provided path (there is of course also a @PostMapping and so on).用于将特定的 HTTP GET 请求映射到控制器的特定方法上，@GetMapping 注解的 PATH 参数指定了该方法应该响应的请求路径
   ![](2024-04-05-08-25-11.png)
 
 * ```mainPage```: load ```localhost：8000```的时候就被调用，HTTP请求的是最基本的回复：
@@ -304,7 +320,7 @@ HTTP使用TCP协议作为其传输层协议，使用TCP保证可靠传输
 * 就是前面的那个href
 主要就是```<a href="https://www.mozilla.org/en-US/">the Mozilla homepage</a>.```
 * Document fragments
-  可以先这样
+  可以先这样（id用于唯一标识一个元素）
   ```<h2 id="Mailing_address">Mailing address</h2>```
   然后再
   ```<p>
@@ -317,7 +333,7 @@ HTTP使用TCP协议作为其传输层协议，使用TCP保证可靠传输
   ![](2024-04-05-17-52-00.png)
   "/courses"：相对于网站根目录的路径
   "courses"：该文件夹下的另一个文件
-  "../courses"
+  "../courses"相对于当前文件所在目录的上一级目录中的 "courses" 文件
 #### Document and website structure
 * HTML for structuring content
 ![](2024-04-05-17-10-08.png)
@@ -655,6 +671,7 @@ PC->72
   * vm,vh 1% of viewport width/height
   * rem root em(html)
   * % parent width/height
+  * ![](2024-05-03-00-42-21.png)
 
 ### Exercise
 
@@ -877,6 +894,7 @@ block->inline->能设置宽高
   ![](2024-04-10-214709.png)
   人家是从1开始的
   ![](2024-04-10-214735.png)
+  ```grid-area: row-start/column-start/row-end/column-end```
 
   学了这个就可以类似的:
 ```CSS
@@ -1007,7 +1025,7 @@ var resultglobal=add (a);
 
 * **Hoisting（提升）**
 
-Hoisting（变量提升）是 JavaScript 中的一种行为，指的是在代码执行阶段，JavaScript 引擎会将**变量和函数的声明**提升到它们所在作用域的顶部，但是只提升声明，不提升赋值
+Hoisting（变量提升）是 JavaScript 中的一种行为，指的是在代码执行阶段，JavaScript 引擎会将**变量和函数的声明**提升到它们所在作用域的顶部，但是只提升声明，**不提升赋值**
 比如说
 ```JavaScript
 console.log(x); // undefined
@@ -1048,6 +1066,7 @@ ages = ages.map(function(age) {
   return age + 10;
 });
 ```
+[30, 35, 40, 45]
 或者有
 ```JavaScript
 var add = function(x, y) {
@@ -1082,8 +1101,29 @@ const person = {
 ```JavaScript
 const { firstName, lastName }= person;
 console.log(firstName);
+-John
 ```
-打印出来是John
+
+```JavaScript
+const people = [
+...   { name: 'Alice', age: 30 },
+...   { name: 'Bob', age: 25 },
+...   { name: 'Charlie', age: 35 }
+... ];
+
+const stringtest = JSON.stringify(people);
+
+console.log(stringtest);
+[{"name":"Alice","age":30},{"name":"Bob","age":25},{"name":"Charlie","age":35}]
+
+> const testBack = JSON.parse(stringtest);
+> console.log(testBack);
+[
+  { name: 'Alice', age: 30 },
+  { name: 'Bob', age: 25 },
+  { name: 'Charlie', age: 35 }
+]
+```
 * 对象数组：
 ```JavaScript
 const people = [
@@ -1336,6 +1376,12 @@ Can also refine search by ‘attrs=’ – see documentation!
 
 # Week 10: Practical Encryption
 
+## Cryptography
+**SSL/TLS**它是一种通用的安全协议，为 TCP（传输控制协议）连接提供了最常见的安全服，相比加密协议更加便利
+
+![](2024-05-02-21-18-24.png)
+
+
 ## Introduction to OpenSSL: A Hands-On Lab using OpenSSL and encryption
 * Understand the purpose and role of SSL Certificate Authorities in web security.
 * Create a root Certificate Authority (CA) for local development.
@@ -1504,6 +1550,8 @@ Client-side validation was part of the required reading in the second session. I
 provides no protection to the server, and is easily disabled in most browsers.
 ???
 required reading?
+这句话是在讨论客户端验证（Client-side validation）。客户端验证是在用户的设备（通常是浏览器）上执行的验证，用于验证用户输入的数据是否符合要求，通常在提交表单之前进行。这可以提供即时的反馈给用户，帮助他们更快地发现并纠正输入错误。
+就是输入表单的时候判断是不是数字哪些东西吧
 
 ### Q28
 ![](2024-04-30-151823.png)
@@ -1543,12 +1591,43 @@ console.log(jsonString);
 
 
 ## Mock Test
+### Q1&2
 ![](2024-04-28-21-29-20.png) 
+这个可以直接找到
+一直在考的超链接
+### Q3
 ![](2024-04-28-21-29-28.png)
+他说bullet point就是unordered 
+然后里面都是li
+### Q4
 ![](2024-04-28-21-29-36.png)
+也是考的超链接
+### Q5
 ![](2024-04-28-21-29-43.png)
+这个也很好考，就是box model margin-border-padding-content
+### Q6
 ![](2024-04-28-21-29-49.png)
+但在标准的 CSS 中，并没有使用 $ 符号作为选择器的一部分
+所以应该是#div
+
+### Q7
 ![](2024-04-28-21-29-56.png)
+* var是什么function scope，如果是在函数外部就是全局
+* var室友hoisting的，而且可以被重新赋值和声明
+* let是block scope的生命变量，block是任何一对被｛｝包围的区域，但是不会被hoisting，只能在代码块内部访问
+* let 变量可以在同一作用域内重新赋值，但不能被重新声明
+
+* 确实const是常量
+* 就是上面说的，之能是var变成全局
+### Q8
 ![](2024-04-28-21-30-04.png)
+而且是大写？？小写还不认 但其实node.js打印出来时undefined
+### Q9
 ![](2024-04-28-21-30-14.png)
+在 JavaScript 中，contains 方法通常用于检查一个字符串是否包含另一个字符串，但它不是字符串原型链上的方法
+
+### Q10
 ![](2024-04-28-21-33-00.png)
+这个考的是JSON和JavaScript互相转化
+* 所有的String都会被“”，但是int不会
+* 只有： 而不是等号
