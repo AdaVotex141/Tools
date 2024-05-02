@@ -1284,10 +1284,25 @@ avoid annoying a server)
 
 ### Exercise
 
+1. 设置服务器
+2. 单页下载
+3. 抓取网站
 
 
+其他：
+* ```-i```选项用于指定包含要下载的URL列表的文件。
+  ```--force-html```选项用于将非HTML文件（如PDF或文本文件）视为HTML文件。
+  ```--spider```选项用于在不下载文件的情况下测试URL的可用性。
 
-## BeautifulSoup
+  ```wget --spider -r -l inf -o wget_log.txt <当前正在阅读的网页URL>``` 这将在wget_log.txt日志文件中记录所有链接的测试结果。通过查看日志文件，您可以检查是否有任何损坏的链接
+
+* 可以使用--user-agent选项来指定wget发送的用户代理字符串
+  ```wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" <URL>```
+* ```wget -r -l 1 http://example.com```递归地下载```http://example.com```页面及其链接，并**限制递归深度为1**,这意味着只会下载```http://example.com```**页面及其直接链接**，而不会继续下载链接中的其他页面
+  ```wget -p http://example.com```将下载```http://example.com```页面，并**下载该页面所链接的所有外部资源**（如图像、CSS文件、JavaScript文件等），但不会递归下载其他页面```
+* ```-nc```或```--no-clobber```选项用于防止wget覆盖已经存在的文件。如果文件已经存在，则wget不会重新下载该文件
+
+## BeautifulSoupw
 BeautifulSoup 是一个功能强大且易于使用的工具，用于解析和操作 HTML 或 XML 文档，常用于网络爬虫、数据抓取和数据分析等任务中
 ![alt text](image.png)
 
@@ -1319,7 +1334,112 @@ Find more than the first match:
 Can also refine search by ‘attrs=’ – see documentation!
 ```
 
+# Week 10: Practical Encryption
 
+## Introduction to OpenSSL: A Hands-On Lab using OpenSSL and encryption
+* Understand the purpose and role of SSL Certificate Authorities in web security.
+* Create a root Certificate Authority (CA) for local development.
+* Generate SSL certificates for localhost domains.
+* Configure web servers to use the self-signed SSL certificates for HTTPS.
+* Test the secure communication with HTTPS-enabled web servers.
+
+1. First we install the OpenSSL tool
+2. Use OpenSSL to encrypt files with symmetric encryption
+  创建了一个txt文件，然后使用openssl加密：```openssl aes256 -in mytext.txt -out mytext.enc```
+
+  但是这里会让你写密码，不想输入密码就是查询了chatGPT是```openssl aes256 -in mytext.txt -out mytext.enc -pass pass:```
+
+  **加密文件和非加密文件有什么区别呢？**
+  加密之后打开是:```Salted__D�^H*Q}x��;�j�^B^R���A*�C^A�```
+  由于加密之后实际上是二进制文件，包含有些不可见内容，所以要全部变成txt课件形式可以
+  ```openssl enc -base64 -in encrypted_file.enc -out encrypted_file_base64.txt```用所谓的base64来进行加密
+  **Is the file size larger than before? If so, why?**
+  在大多数情况下，加密后的文件大小会略微增加。这是由于加密算法的性质以及可能添加到文件中的任何元数据或填充导致的。
+
+  **How to decrypt using OpenSSL**
+  加个```-d```
+  ```openssl aes256 -d -in encrypted_file.enc -out decrypted_file.txt -pass pass:yourpassword```
+3. Use OpenSSL to encrypt files with asymmetric(非对称加密) encryption(就是公钥和私钥那个东西) 
+
+  1. Generate Key Pairs: Use genrsa to generate a 1024-bit public-private key pair.
+  ```openssl genrsa -out private_key.pem 1024```
+  1. Distribute the Public Key: Extract the public key from the private key and save it to a .pem file.
+   ```openssl rsa -in private_key.pem -out public_key.pem -pubout```
+  2. Exchange Public Keys: Share your public key (public_key.pem) with the person you want to communicate with and obtain their public key as well.
+  3. Create Encrypted Message: Encrypt a message using the recipient's public key.
+   ```openssl rsautl -encrypt -pubin -inkey recipient_public_key.pem -in plaintext.txt -out encrypted_message.bin```
+  4. Decrypt the Message: The recipient can decrypt the message using their private key.
+  ```openssl rsautl -decrypt -inkey private_key.pem -in encrypted_message.bin -out decrypted_message.txt```
+
+  **why we use HTTPS?**
+  使用 HTTPS 的网站可以向客户保证其连接是安全的。 HTTPS（即安全超文本传输​​协议）是 HTTP 的受保护版本，HTTP 是用于在浏览器和您正在访问的网站之间传输数据的协议。优先保护用户的隐私和数据安全对于向使用我们在线开发的网络服务的人们灌输信任至关重要
+  **why we use HTTPS localy**
+我们需要创建一个与生产非常相似的开发环境。这种做法有助于避免将来在线部署 Web 应用程序或网站时出现问题。
+4. Configure and utilize Nginx with HTTPS for creating a localhost web app and sign a certificate request with OpenSSL.
+配置并使用带有HTTPS的Nginx创建本地主机的Web应用程序
+
+* CSR）certificate signing request 包含三个东西
+ the public key
+ the system that triggers the request
+ the signature of the request.
+
+1. Generate RSA Private Key
+   跟上面一样，先创造一组
+   ```openssl genrsa -out cert.key 2048```
+2. Create CSR
+  创造一整个CSR环境
+  ```openssl req -new -key cert.key -out cert.csr```
+
+* Create the Configuration File
+创建一个名字叫```openssl.cnf```
+```
+[#]Extensions to add to a certificate request
+
+basicConstraints       = CA:FALSE
+
+authorityKeyIdentifier = keyid:always, issuer:always
+
+keyUsage               = nonRepudiation, digitalSignature, keyEncipherment, dataEncipherment
+
+subjectAltName         = @alt_names
+
+[ alt_names ]
+
+DNS.1 = your hostname
+
+```
+然后签名+输入
+```$ ~/store-csr$ openssl verify -CAfile rootCert.pem -verify_hostname your hostname cert.crt```
+**Nginx Configuration**
+
+3. How to use OpenSSL to test an SSL connections
+
+
+
+* s_client：OpenSSL的s_client专门用于测试SSL连接。它提供了关于SSL握手过程、证书细节和SSL/TLS协商的详细信息。它特别适用于调试SSL相关的问题和验证服务器配置。
+* netcat（nc）：Netcat是一个通用的网络工具，可用于各种用途，包括与服务器建立TCP或UDP连接。虽然netcat可以用于连接到启用SSL的服务器，**但它不像OpenSSL的s_client那样提供详细的SSL/TLS信息**。
+* telnet：Telnet是一种网络协议和工具，允许用户通过网络与远程计算机通信。s_client：OpenSSL的s_client专门用于测试SSL连接。它提供了关于SSL握手过程、证书细节和SSL/TLS协商的详细信息。它特别适用于调试SSL相关的问题和验证服务器配置。
+netcat（nc）：Netcat是一个通用的网络工具，可用于各种用途，包括与服务器建立TCP或UDP连接。虽然netcat可以用于连接到启用SSL的服务器，但它不像OpenSSL的s_client那样提供详细的SSL/TLS信息。
+telnet：Telnet是一种网络协议和工具，允许用户通过网络与远程计算机通信。Telnet可以用于与服务器建立TCP连接，但它不支持SSL/TLS加密。因此，它不能用于测试SSL连接。。因此，它不能用于测试SSL连接。
+
+## Introduction to PGP encryption
+PGP（Pretty Good Privacy）
+
+创建密钥对：```gpg --generate-key```
+发送```$ gpg --output ~/mypub.key --armor --export youremail@mail.com```
+导入公钥：```gpg --import external_public_key.asc```
+签名公钥:可选地，您可以对导入的公钥进行签名，以表示对该密钥的信任。您可以使用--sign-key参数对公钥进行签名。
+```gpg --sign-key user@example.com```
+导出签名后的公钥: 如果您签署了外部用户的公钥，可以将签名后的公钥导出并与他们共享，以加强对彼此的信任```gpg --output signed_external_public_key.asc --export user@example.com```
+
+解密消息```gpg --decrypt received_message.asc```
+
+导出公钥```gpg --armor --export email > my_public_key.asc```
+发送到公钥服务器```gpg --send-key email```
+
+搜索用户公钥```gpg --search user@example.com```
+导入用户的公钥```gpg --recv-keys key_id```
+验证公钥的真实性```gpg --fingerprint user@example.com```
 
 
 
@@ -1365,3 +1485,58 @@ PPT上说的是script language，问了chatgpt是都对= =
 并且对于对象而言，```===```和```==```都可以指对象的引用
 
 ## Paper 2
+
+### Q23
+![](2024-04-30-151742.png)
+
+![](2024-04-30-165104.png)
+因为请求行中的路径指定了访问的资源（/hello.txt），而User-Agent头部显示了请求是由curl发送的。所以，最合理的解释是有人使用curl工具来请求http://www.example.com/hello.txt
+### Q25
+![](2024-04-30-151759.png)
+是```The Mozillar homepage```但是不知道这个是什么（
+原来是contents of the anchor tag啊
+Anchor tag（锚点标签）是HTML中的一个标签，用于创建超链接。在HTML中，锚点标签用<a>元素表示
+
+### Q26
+![](2024-04-30-151811.png)
+
+Client-side validation was part of the required reading in the second session. It
+provides no protection to the server, and is easily disabled in most browsers.
+???
+required reading?
+
+### Q28
+![](2024-04-30-151823.png)
+这个原文说的是
+```
+this method should be called to **reply** to a HTTP GET request for the provided path (there is of course also a @PostMapping and so on).
+```
+所以选了B，但其实好像不会return东西的
+![](2024-04-30-154249.png)
+SpringMVC相关：*@GetMapping("/student/ids")中的"/student/ids"部分指示了控制器方法应该处理的URL路径，但是没有指定方法的参数。在Spring MVC中，使用花括号（curly braces）{}表示路径变量，例如@GetMapping("/student/{id}")，其中{id}是一个占位符，表示接受一个名为"id"的路径变量*
+由于没有花括号所以其实没有传入任何东西
+
+### Q41
+![](2024-04-30-151836.png)
+就是想多了，本身是JSON形式，转变成JavaScript不会自动删掉的x虽然
+确实有
+
+```JavaScript
+const obj = {Name: "Joe", City: "Bristol"};
+const jsonString = JSON.stringify(obj);
+console.log(jsonString);
+```
+结果是```{"Name":"Joe","City":"Bristol"}```
+但是如果本身是String->JSON.parse反而结果是
+```JavaScript
+{
+  "Name": "Joe",
+  "City": "Bristol"
+}
+```
+
+### Q44
+![](2024-04-30-151919.png)
+是React的渲染方法，render()实际上是
+*在这个方法中，有一个数组names，包含了三个字符串元素："John"，"Matt"和"Joseph"。然后，在return语句中，通过map方法遍历names数组的每个元素，并返回一个<p>元素，其中的文本内容是names[1]，也就是数组中索引为1的元素*
+但是我觉得更多是和map相关，map会映射所有的元素，所以会返回三次
